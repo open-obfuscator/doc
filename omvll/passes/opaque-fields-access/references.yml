@@ -1,0 +1,29 @@
+publications:
+  - title: "Automation Techniques in C++ Reverse Engineering"
+    url: https://static1.squarespace.com/static/53a64cc2e4b0c63fc41a3320/t/5d48d619208ae80001a24efc/1565054491140/CPP+Dynamic+Type+Recovery.pdf
+    authors: ["Rolf Rolles"]
+    date: 2019-08-05
+    type: "slides"
+  - title: "Ghidra 101: Creating Structures in Ghidra"
+    url: https://www.tripwire.com/state-of-security/security-data-protection/ghidra-101-creating-structures-in-ghidra/
+    authors: ["Craig Young"]
+    date: 2021-04-12
+    type: "blog"
+  - title: "dynStruct: An automatic reverse engineering tool for structure recovery and memory use analysis"
+    url: https://kar.kent.ac.uk/58461/1/D.Mercier%20dynStruct.pdf
+    authors: ["Daniel Mercier"]
+    date: 2016-09-09
+    type: "master-thesis"
+  - title: "Automated Reverse Engineering of Relationships Between Data Structures in C++ Binaries"
+    url: https://research.nccgroup.com/wp-content/uploads/2020/07/automated-reverse-engineering-of-relationships-between-data-structures-in-c-binaries.pdf
+    authors: ["Nick Collisson for NCC Group"]
+    date: 2017-12-07
+    type: "article"
+tools:
+  - name: dynStruct
+    url: https://github.com/ampotos/dynStruct
+    where: github
+    authors:
+      - name: "Daniel Mercier"
+        profile: https://github.com/ampotos
+

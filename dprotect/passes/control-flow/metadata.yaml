@@ -1,0 +1,5 @@
+protections: ["static"]
+resilience: 2
+overhead: "Code & Execution"
+attacks: "no"
+source: https://github.com/open-obfuscator/dProtect/tree/main/base/src/main/java/dprotect/obfuscation/controlflow

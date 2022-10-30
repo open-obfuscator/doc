@@ -1,0 +1,5 @@
+protections: ["static"]
+resilience: 3
+overhead: "low"
+attacks: "no"
+source: https://github.com/open-obfuscator/o-mvll/tree/main/src/passes/break-cfg

@@ -1,0 +1,41 @@
+email: ping@obfuscator.re
+twitter: open_obfuscator
+gh: open-obfuscator
+omvll:
+  github: https://github.com/open-obfuscator/o-mvll
+  release: https://github.com/open-obfuscator/o-mvll/releases/
+  nightly: http://nightly.obfuscator.re/latest/omvll
+  api-doc: https://open-obfuscator.github.io/o-mvll
+  version:
+    tag: 1.0.0
+    date: 30-10-2022
+  dependencies:
+    python:
+      version: 3.10.7
+      src: https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz
+    spdlog:
+      version: 1.10.0
+      src: https://github.com/gabime/spdlog/archive/refs/tags/v1.10.0.tar.gz
+    pybind11:
+      version: 2.10.0
+      src: https://github.com/pybind/pybind11/archive/refs/tags/v2.10.0.tar.gz
+  prebuilt:
+    ndk:
+      r25: https://data.romainthomas.fr/omvll-deps-ndk-r25.tar
+    xcode:
+      v14: https://data.romainthomas.fr/omvll-deps-xcode-14.tar
+dprotect:
+  github: https://github.com/open-obfuscator/dprotect
+  release: https://github.com/open-obfuscator/dprotect/releases/
+  nightly: http://nightly.obfuscator.re/latest/dprotect
+  maven:
+    id: "re.obfuscator"
+    url: "https://maven.pkg.github.com/open-obfuscator/dProtect"
+  version:
+    tag: 1.0.0
+    date: 30-10-2022
+dprotect-core:
+  github: https://github.com/open-obfuscator/dprotect-core
+  release: https://github.com/open-obfuscator/dprotect-core/releases/
+  nightly: http://nightly.obfuscator.re/latest/dprotect
+

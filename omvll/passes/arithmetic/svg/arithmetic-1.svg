@@ -1,0 +1,17 @@
+<?xml version="1.0" ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="903.961" height="569.15997" viewBox="0 0 239.17329 150.59024" version="1.1" id="svg5" xml:space="preserve"><defs id="defs2"><rect x="22.319975" y="66.959999" width="848.159" height="479.88" id="rect2499"/></defs><g id="layer1"><g id="g26287" transform="matrix(0.26458333,0,0,0.26458333,151.03674,16.444252)"><g id="g26211" transform="translate(-559.68753,-50.991504)" style="display:inline">
+	<path style="fill:#e6e6e6;fill-opacity:1" d="M 850.74201,546.84001 H 30.897 C 13.833,546.84001 0,533.00701 0,515.94301 V 42.057 C 0,24.993 13.833,11.16 30.897,11.16 h 819.84601 c 17.064,0 30.897,13.833 30.897,30.897 v 473.88601 c -10e-4,17.064 -13.834,30.897 -30.898,30.897 z" id="path26201"/>
+	<path style="fill:#434141;fill-opacity:1" d="M 881.64001,44.64 H 0.0010028 L 0,30.897 C -0.00124512,13.833 13.833,0 30.897,0 h 819.84601 c 17.063,0 30.896,13.833 30.896,30.897 z" id="path26203"/>
+	
+	
+	
+<text xml:space="preserve" transform="matrix(1.0000012,0,0,1.0000012,-11.159998,-11.160334)" id="text2497" style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:28px;font-family:'Fira Code';-inkscape-font-specification:'Fira Code, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect2499);display:inline;opacity:1;fill:#434141;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-miterlimit:2;paint-order:fill markers stroke"><tspan x="22.320312" y="91.460938" id="tspan6499">
+</tspan><tspan x="22.320312" y="126.46094" id="tspan6501">int add = x + y;
+</tspan><tspan x="22.320312" y="161.46094" id="tspan6503">
+</tspan><tspan x="22.320312" y="196.46094" id="tspan6505">int sub = x - y;
+</tspan><tspan x="22.320312" y="231.46094" id="tspan6507">
+</tspan><tspan x="22.320312" y="266.46094" id="tspan6509">int xor = x ^ y;
+</tspan><tspan x="22.320312" y="301.46094" id="tspan6511">
+</tspan><tspan x="22.320312" y="336.46094" id="tspan6513">int and = x &amp; y;
+</tspan><tspan x="22.320312" y="371.46094" id="tspan6515">
+</tspan><tspan x="22.320312" y="406.46094" id="tspan6517">int  or = x | y;
+</tspan></text></g></g></g></svg>

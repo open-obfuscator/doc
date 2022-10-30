@@ -1,0 +1,37 @@
+publications:
+  - title: "Improving MBA Deobfuscation using Equality Saturation"
+    url: https://secret.club/2022/08/08/eqsat-oracle-synthesis.html
+    authors: ["Tim Blazytko", "Matteo"]
+    date: 2022-08-08
+    type: "blog"
+  - title: "Obfuscation with Mixed Boolean-Arithmetic Expressions : reconstruction, analysis and simplification tools"
+    url: https://tel.archives-ouvertes.fr/tel-01623849
+    authors: ["Ninon Eyrolles"]
+    date: 2017-06-30
+    type: "phd"
+  - title: "Arybo: cleaning obfuscation by playing with mixed boolean and arithmetic operations"
+    url: https://blog.quarkslab.com/arybo-cleaning-obfuscation-by-playing-with-mixed-boolean-and-arithmetic-operations.html
+    authors: ["Adrien Guinet"]
+    date: 2016-09-12
+    type: "blog"
+  - title: "Efficient Deobfuscation of Linear Mixed Boolean-Arithmetic Expressions"
+    url: https://arxiv.org/pdf/2209.06335
+    authors: ["Benjamin Reichenwallner", "Peter Meerwald-Stadler"]
+    date: 2022-09-13
+    type: "article"
+tools:
+  - name: msynth
+    url: https://github.com/mrphrazer/msynth
+    where: github
+    authors:
+      - name: "Tim Blazytko"
+        profile: https://github.com/mrphrazer
+talks:
+  - title: "Advanced Code Obfuscation With MBA Expressions"
+    url: "https://www.youtube.com/watch?v=5yDzbFz2yWo"
+    date: 2022-09-28
+    icon: "youtube"
+    authors:
+      - name: "Arnau Gàmez Montolio"
+        link: https://arnaugamez.com/
+

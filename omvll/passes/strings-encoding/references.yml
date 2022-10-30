@@ -1,0 +1,11 @@
+publications:
+  - title: "Automation in Reverse Engineering: String Decryption"
+    url: https://www.synthesis.to/2021/06/30/automating_string_decryption.html
+    authors: ["Tim Blazytko"]
+    date: 2021-06-30
+    type: "blog"
+  - title: "Recovering Obfuscated Strings in PokemonGO  "
+    url: https://www.romainthomas.fr/post/21-07-pokemongo-anti-frida-jailbreak-bypass#what-about-lief
+    authors: ["Romain Thomas"]
+    date: 2021-07-18
+    type: "blog"

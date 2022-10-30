@@ -1,0 +1,48 @@
+publications:
+  - title: "Approov Control Flow Unflattening"
+    url: "https://eybisi.run/Control-Flow-Unflattening/"
+    type: "blog"
+    authors: ["Ahmet Bilal Can"]
+    date: 2022-10-26
+  - title: "D810: A journey into control flow unflattening "
+    url: https://eshard.com/posts/D810-a-journey-into-control-flow-unflattening
+    authors: ["Batteaux Boris"]
+    date: 2021-10-21
+    type: "blog"
+  - title: "Deobfuscation: recovering an OLLVM-protected program "
+    url: https://blog.quarkslab.com/deobfuscation-recovering-an-ollvm-protected-program.html
+    authors: ["Francis Gabriel"]
+    date: 2014-12-04
+    type: "blog"
+  - title: "Automated Detection of Control-flow Flattening"
+    url: https://www.synthesis.to/2021/03/03/flattening_detection.html
+    authors: ["Tim Blazytko"]
+    date: 2021-03-03
+    type: "blog"
+  - title: "iOS Native Code Obfuscation and Syscall Hooking"
+    url: https://www.romainthomas.fr/post/22-09-ios-obfuscation-syscall-hooking/#control-flow-flattening
+    authors: ["Romain Thomas"]
+    date: 2022-09-13
+    type: "blog"
+tools:
+  - name: d810
+    url: https://gitlab.com/eshard/d810/
+    where: gitlab
+    authors:
+      - name: "Boris Batteux"
+  - name: d810 (fork by Ahmet Bilal Can)
+    url: https://github.com/eybisi/d810
+    where: github
+    authors:
+      - name: "Ahmet Bilal Can"
+        profile: https://twitter.com/0xabc0
+attacks:
+  - title: "ollvm-breaker"
+    description: "BinaryNinja script to recover O-LLVM flattened function"
+    type: "script"
+    url: "https://github.com/amimo/ollvm-breaker/blob/master/deflatten.py"
+  - title: "llvm-deobfuscator"
+    description: "Performs the inverse operation of the control flow flattening pass"
+    type: script
+    url: "https://github.com/RPISEC/llvm-deobfuscator"
+

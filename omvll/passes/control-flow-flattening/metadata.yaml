@@ -1,0 +1,5 @@
+protections: ["static"]
+resilience: 3
+overhead: "Code & Execution"
+attacks: "yes"
+source: https://github.com/open-obfuscator/o-mvll/tree/main/src/passes/flattening
