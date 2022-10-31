@@ -33,6 +33,33 @@ buildscript {
 }
 ```
 
+Even if the packages are public, **you need to generate a github token** to access GitHub Maven Packages:
+
+
+```gradle {hl_lines=["6-9"]}
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+          url = uri("{{< get-var "dprotect.maven.url" >}}")
+          credentials {
+              username = "your-username"
+              password = "the-token"
+          }
+        }
+    }
+    dependencies {
+        classpath '{{< get-var "dprotect.maven.id" >}}:dprotect-gradle:{{< get-var "dprotect.version.tag" >}}'
+    }
+}
+```
+
+The generated token must have the `repo` scope enabled. You can also look at the GitHub documentation
+for the details: [Using a published package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package).
+
+
+
+
 Then, in the `build.gradle` of the application, we can instantiate the Gradle plugin and define the `dProtect`
 configuration block:
 
