@@ -12,7 +12,7 @@ The purpose of this pass is the break the control-flow representation.
 {{< /pass_purpose >}}
 
 {{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass does work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
+This pass does not work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
 {{< /alert >}}
 
 {{< compare "svg/control-flow-breaking-1.svg" "svg/control-flow-breaking-2.svg" "omvll">}}

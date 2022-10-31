@@ -12,7 +12,7 @@ The purpose of this pass is to protect functions against hooking frameworks like
 {{< /pass_purpose >}}
 
 {{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass does work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
+This pass does not work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
 {{< /alert >}}
 
 {{< compare "svg/anti-hook-1.svg" "svg/anti-hook-2.svg" "omvll">}}
