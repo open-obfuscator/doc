@@ -19,7 +19,28 @@ publications:
     authors: ["Benjamin Reichenwallner", "Peter Meerwald-Stadler"]
     date: 2022-09-13
     type: "article"
+  - title: "Greybox Program Synthesis: A New Approach to Attack Dataflow Obfuscation"
+    url: https://i.blackhat.com/USA21/Wednesday-Handouts/US-21-David-Greybox-Program-Synthesis.pdf
+    authors: ["Robin David"]
+    date: 2021-08-05
+    type: "slides"
+  - title: "Greybox Program Synthesis: A New Approach to Attack Dataflow Obfuscation"
+    url: https://i.blackhat.com/USA21/Wednesday-Handouts/US-21-David-Greybox-Program-Synthesis-wp.pdf
+    authors: ["Robin David"]
+    date: 2021-08-05
+    type: "article"
+  - title: "QSynth - A Program Synthesis based Approach for Binary Code Deobfuscation"
+    url: https://archive.bar/pdfs/bar2020-preprint9.pdf
+    authors: ["Robin David", "Luigi Coniglio", "Mariano Ceccato"]
+    date: 2020-02-26
+    type: "article"
 tools:
+  - name: qsynthesis
+    url: https://github.com/quarkslab/qsynthesis
+    where: github
+    authors:
+      - name: "Robin David"
+        profile: https://github.com/RobinDavid
   - name: msynth
     url: https://github.com/mrphrazer/msynth
     where: github
@@ -27,6 +48,13 @@ tools:
       - name: "Tim Blazytko"
         profile: https://github.com/mrphrazer
 talks:
+  - title: " Greybox Program Synthesis: A New Approach to Attack Dataflow Obfuscation "
+    url: "https://www.youtube.com/watch?v=eJo74i7nxtk"
+    date: 2021-08-05
+    icon: "youtube"
+    authors:
+      - name: "Robin David"
+        link: http://www.robindavid.fr/
   - title: "Advanced Code Obfuscation With MBA Expressions"
     url: "https://www.youtube.com/watch?v=5yDzbFz2yWo"
     date: 2022-09-28
