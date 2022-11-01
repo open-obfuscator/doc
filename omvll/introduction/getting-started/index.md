@@ -309,6 +309,17 @@ OMVLL_PYTHONPATH: "/Users/romain/Downloads/Python-3.10.8/Lib"
 OMVLL_CONFIG:     "/Users/romain/dev/ios-app/demo/omvll_conf/base.py"
 ```
 
+## Code Completion
+
+The PyPI package [`omvll`](https://pypi.org/project/omvll/1.0.0/) can be used to get code completion
+while using O-MVLL:
+
+```bash
+$ python -m pip install [--user] omvll
+```
+
+![O-MVLL Code Completion](./img/completion.webp "O-MVLL Code Completion")
+
 ## Requirements and Limitations
 
 {{< admonition title="Cross Compilation" icon="fa-regular fa-triangle-exclamation" color="danger">}}
