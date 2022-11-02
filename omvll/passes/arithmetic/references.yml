@@ -1,7 +1,7 @@
 publications:
   - title: "Improving MBA Deobfuscation using Equality Saturation"
     url: https://secret.club/2022/08/08/eqsat-oracle-synthesis.html
-    authors: ["Tim Blazytko", "Matteo"]
+    authors: ["Matteo Favaro", "Tim Blazytko"]
     date: 2022-08-08
     type: "blog"
   - title: "Obfuscation with Mixed Boolean-Arithmetic Expressions : reconstruction, analysis and simplification tools"
@@ -62,4 +62,8 @@ talks:
     authors:
       - name: "Arnau Gàmez Montolio"
         link: https://arnaugamez.com/
-
+attacks:
+  - title: "Oracle Synthesis Meets Equality Saturation"
+    description: "PoC associated with the blog post: 'Improving MBA Deobfuscation using Equality Saturation'."
+    type: "script"
+    url: "https://github.com/fvrmatteo/oracle-synthesis-meets-equality-saturation"
