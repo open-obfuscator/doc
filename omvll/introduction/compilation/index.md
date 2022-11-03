@@ -20,7 +20,7 @@ The CMake configuration step can be invoked as follows:
 
 ```bash
 $ git clone https://github.com/open-obfuscator/o-mvll.git
-$ mkdir o-mvll/build && cd o-mvll/build
+$ mkdir o-mvll/src/build && cd o-mvll/src/build
 ```
 
 ##### On Linux
