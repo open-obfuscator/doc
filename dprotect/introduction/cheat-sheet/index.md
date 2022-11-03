@@ -8,9 +8,9 @@ weight = 40
 {{< hicon lvl=2 icon="fa-regular fa-calculator-simple" >}}Arithmetic Obfuscation{{< /hicon >}}
 
 ```bash
--obfuscate-arithmetic,low re.dprotect.** { *; }
+-obfuscate-arithmetic,low class re.dprotect.** { *; }
 
--obfuscate-arithmetic re.dprotect.MyClass {
+-obfuscate-arithmetic class re.dprotect.MyClass {
   java.lang.String decode();
 }
 ```
@@ -18,9 +18,9 @@ weight = 40
 {{< hicon lvl=2 icon="fa-regular fa-input-numeric" >}}Constants Obfuscation{{< /hicon >}}
 
 ```bash
--obfuscate-constants re.dprotect.** { *; }
+-obfuscate-constants class re.dprotect.** { *; }
 
--obfuscate-constants re.dprotect.MyClass {
+-obfuscate-constants class re.dprotect.MyClass {
   private static void init();
 }
 ```
@@ -39,7 +39,7 @@ weight = 40
                    "AES/CBC/PKCS5PADDING",
                    "android_id"
 
--obfuscate-strings re.dprotect.MyClass {
+-obfuscate-strings class re.dprotect.MyClass {
   private static java.lang.String API_KEY;
   public static java.lang.String getToken();
 }
