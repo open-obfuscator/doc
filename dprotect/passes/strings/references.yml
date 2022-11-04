@@ -1,0 +1,7 @@
+attacks:
+  - title: "Reversing dProtect - Strings Obfuscation"
+    description: "This blog post explains how JEB Decompiler can recover strings protected with dProtect."
+    type: "blog"
+    url: "https://www.pnfsoftware.com/blog/reversing-dprotect/"
+
+

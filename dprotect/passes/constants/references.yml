@@ -1,0 +1,11 @@
+attacks:
+  - title: "Reversing dProtect - Constants Scrambling"
+    description: "This blog post explains how JEB Decompiler can recover constants protected with dProtect."
+    type: "blog"
+    url: "https://www.pnfsoftware.com/blog/reversing-dprotect/"
+  - title: "DOptUnsafeArrayAccessSubstV3.java"
+    description: "JEB Script used for recovering obfuscated constants."
+    type: "script"
+    url: https://gist.github.com/nfalliere/f3f051bcdeb2e93665eee75dd69c1e6d
+
+

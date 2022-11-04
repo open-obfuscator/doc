@@ -164,7 +164,7 @@ pass are **ALWAYS** masked with a xor operation which could be improved by using
 This pass is also unlikely resilient against a Jadx plugin or a Proguard-based deobfuscation pass that would
 identify the `OPAQUE_CONSTANTS_ARRAY` attribute and the instructions that use it.
 
+JEB Decompiler also published a blog post about how this protection can be defeated: [*Reversing dProtect*](https://www.pnfsoftware.com/blog/reversing-dprotect/).
 
-
-
+{{< include-references "references.yml" >}}
 

@@ -343,4 +343,14 @@ The decoding routine could also be hooked by an attacker to access the clear str
 Nevertheless, this would require to setup hooks for **all the classes** as the decoding routines
 are local and different for each class.
 
+{{< alert type=warning icon="fa-solid fa-dagger">}}
+Last but not least, JEB Decompiler is able to recover the original string as described in this blog post:
+[*Reversing dProtect*](https://www.pnfsoftware.com/blog/reversing-dprotect/).
+{{< /alert >}}
+
+## References
+
+{{< include-references "references.yml" >}}
+
 [^keep-info]: `-obfuscate-string` relies on the same parser as the `-keep` option.
+
