@@ -1,5 +1,8 @@
 email: ping@obfuscator.re
 twitter: open_obfuscator
+mastodon:
+  url: "https://infosec.exchange/@obfuscator"
+  name: "open-obfuscator"
 gh: open-obfuscator
 omvll:
   github: https://github.com/open-obfuscator/o-mvll
