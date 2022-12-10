@@ -4,6 +4,7 @@ mastodon:
   url: "https://infosec.exchange/@obfuscator"
   name: "open-obfuscator"
 gh: open-obfuscator
+discord: http://discord.obfuscator.re
 omvll:
   github: https://github.com/open-obfuscator/o-mvll
   release: https://github.com/open-obfuscator/o-mvll/releases/
