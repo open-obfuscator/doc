@@ -8,7 +8,7 @@ but the **design** of all these protections is **public**:
 - The ELF format modifications are described here: [The Poor Man's Obfuscator](https://www.romainthomas.fr/publication/22-pst-the-poor-mans-obfuscator/).
 - All the algorithms used in the challenge are public.
 
-As obfuscation is a matter of time, the first prize of this challenge will be eligible for <u>6 months</u> <span id="days-left"></span>.
+As obfuscation is a matter of time, the first prize of this challenge will be eligible for <u>6 months</u>.
 During this period, the first person to find the correct login/password will be able to choose between a BinaryNinja license
 or a cash prize of 1300$/€.
 

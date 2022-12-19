@@ -53,9 +53,9 @@ countdown(
   countdown.YEARS | countdown.MONTHS  | countdown.WEEKS   | countdown.DAYS |
   countdown.HOURS | countdown.MINUTES | countdown.SECONDS);
 
-countdown(
-  function(ts) {
-    document.getElementById('days-left').innerHTML = "(" + ts + " left since now)";
-  },
-  Date.parse(end_date),
-  countdown.MONTHS | countdown.WEEKS | countdown.DAYS);
+//countdown(
+//  function(ts) {
+//    document.getElementById('days-left').innerHTML = "(" + ts + " left since now)";
+//  },
+//  Date.parse(end_date),
+//  countdown.MONTHS | countdown.WEEKS | countdown.DAYS);
