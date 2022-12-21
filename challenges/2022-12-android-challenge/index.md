@@ -5,7 +5,7 @@ starting_date   = "2022-12-19"
 ending_date     = "2023-08-19"
 date            = "2022-12-19"
 lastmod         = "2022-12-19"
-resolved        = false
+resolved        = true
 challenge_file  = "https://romainthomas.fr/challenge-pydroid.apk"
 headless        = false
 sitemap_exclude = false
@@ -18,11 +18,11 @@ typed           = true
   primary   = "#2aff2a"
   secondary = "#ff2a7f"
 
-#[[results]]
-#name = "Mary Major"
-#date = "2022-12-23 11:22:33"
-#fastest = true
-#
+[[results]]
+name = "To be published"
+date = "2022-12-21 16:37:00"
+fastest = true
+
 #[[results]]
 #name = "John Doe"
 #date = "2022-12-27 11:22:34"
