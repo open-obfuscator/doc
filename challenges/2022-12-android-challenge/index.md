@@ -19,8 +19,9 @@ typed           = true
   secondary = "#ff2a7f"
 
 [[results]]
-name = "To be published"
+name = "TheBadGod"
 date = "2022-12-21 16:37:00"
+twitter = "@HodelAaron"
 fastest = true
 
 #[[results]]
