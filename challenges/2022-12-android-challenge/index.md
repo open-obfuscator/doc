@@ -21,17 +21,14 @@ typed           = true
 [[results]]
 name = "TheBadGod"
 date = "2022-12-21 16:37:00"
-twitter = "@HodelAaron"
+twitter = "https://twitter.com/HodelAaron"
 fastest = true
 
-#[[results]]
-#name = "John Doe"
-#date = "2022-12-27 11:22:34"
-#twitter = "@test"
-#mastodon = "@test"
-#website = "@test"
-#github = "@test"
-#
+[[results]]
+name = "Dauntless"
+date = "2022-12-23 12:40:00"
+github = "https://github.com/TheDauntless"
+
 #[[results]]
 #name = "John Doe"
 #date = "2023-01-27 11:22:34"
