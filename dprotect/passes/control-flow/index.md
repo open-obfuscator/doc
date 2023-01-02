@@ -92,8 +92,8 @@ reverse engineers will likely focus on this single protected function.
 You can trigger this pass with the option: `-obfuscate-control-flow`:
 
 ```bash
--obfuscate-control-flow class class com.password4j.Argon2Function { *; }
--obfuscate-control-flow class class com.dprotect.** { *; }
+-obfuscate-control-flow class com.password4j.Argon2Function { *; }
+-obfuscate-control-flow class com.dprotect.** { *; }
 ```
 
 In its current form, this pass takes a class specifier as argument and does not have extra modifiers.
