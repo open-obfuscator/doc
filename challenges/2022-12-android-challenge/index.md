@@ -29,6 +29,12 @@ name = "Dauntless"
 date = "2022-12-23 12:40:00"
 github = "https://github.com/TheDauntless"
 
+[[results]]
+name = "Alemdar"
+date = "2023-01-07 06:00:00"
+mastodon = "https://infosec.exchange/@alemdar"
+
+
 #[[results]]
 #name = "John Doe"
 #date = "2023-01-27 11:22:34"
