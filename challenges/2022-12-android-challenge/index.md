@@ -34,6 +34,12 @@ name = "Alemdar"
 date = "2023-01-07 06:00:00"
 mastodon = "https://infosec.exchange/@alemdar"
 
+[[results]]
+name = "Ahmet Bilal Can"
+date = "2023-01-15 15:50:00"
+twitter = "https://twitter.com/0xabc0"
+website = "http://eybisi.run/"
+
 
 #[[results]]
 #name = "John Doe"
