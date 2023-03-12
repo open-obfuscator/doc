@@ -290,6 +290,119 @@ needs to be set.
 It can be worth adding `o-config.py`, `omvll.yml`, and `omvll.env` in `.gitignore` to avoid leaks.
 {{</ alert >}}
 
+## Android NDK (WSL)
+
+
+{{< alert type="success" >}}
+*Thank you to [Tomáš Soukal](https://sirionrazzer.github.io/blog/) from [Talsec](https://www.talsec.app/)
+for this section.*
+{{</ alert >}}
+
+### Preparing the WSL for commandline Android development
+
+Based on this article [WSL for Developers!: Installing the Android SDK](https://dev.to/halimsamy/wsl-for-developers-installing-the-android-sdk-53n9)
+
+#### Installing OpenJDK and Gradle
+
+```bash
+sudo apt-get update
+sudo apt install openjdk-8-jdk-headless gradle
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+```
+
+#### Installing Android Command Line Tools
+
+```bash
+cd ~ # Make sure you are at home!
+curl https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -o /tmp/cmd-tools.zip
+mkdir -p android/cmdline-tools
+unzip -q -d android/cmdline-tools /tmp/cmd-tools.zip
+mv android/cmdline-tools/cmdline-tools android/cmdline-tools/latest
+rm /tmp/cmd-tools.zip # delete the zip file (optional)
+```
+
+#### Setting up environment variables
+
+You could possibly join include these lines in `omvll.env` file:
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export ANDROID_HOME=$HOME/android
+export ANDROID_SDK_ROOT=${ANDROID_HOME}
+export PATH=${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${PATH}
+```
+
+#### Accepting SDK licenses
+
+You will find sdkmanager in /tools/bin/sdkmanager:
+
+```bash
+yes | sdkmanager --licenses
+```
+
+#### Installing SDK components
+
+* pay attention to use ndk version matching the downloaded obfuscator (I used `25.0.8775105 - omvll_ndk_r25.so`)
+
+```bash
+./sdkmanager --update
+./sdkmanager "platforms;android-31" "build-tools;31.0.0" "ndk;25.0.8775105" "platform-tools"
+```
+
+### Obfuscator related changes
+
+#### build.gradle
+
+* adjust path to obfuscator binary ``omvll_ndk_r25.so``, change 'tom' to your username:
+
+```gradle
+externalNativeBuild {
+    cmake {
+        cppFlags "-std=c++14 -frtti -fexceptions
+                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/omvll_ndk_r25.so"
+    }
+}
+```
+
+#### omvll.env
+
+```bash
+export NDK_VERSION=25.0.8775105
+export LD_LIBRARY_PATH=/home/tom/android/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/lib64
+export OMVLL_CONFIG=/mnt/c/Users/tom/path-to-project/omvll-config.py
+export OMVLL_PYTHONPATH=/mnt/c/Users/tom/path-to-project/Python-3.10.7/Lib
+```
+
+#### local.properties
+
+I needed to adjust the line with `sdk.dir` in the `local.properties` file:
+
+```ini
+...
+sdk.dir=/home/tom/android
+...
+```
+
+#### Troubleshooting
+
+I ran into this issue when running gradlew,
+
+```bash
+env: bash\r: No such file or directory
+```
+
+The following change helped me:
+
+```bash
+vim gradlew
+:set fileformat=unix
+:wq
+```
+
+Finally:
+
+`gradlew clean build`, `gradlew assembleRelease`, or whatever you like :)
+
 ## iOS
 
 Using O-MVLL with Xcode is a bit easier than Android since we don't need to deal with different `libstdc++/libc++`.
