@@ -40,6 +40,11 @@ date = "2023-01-15 15:50:00"
 twitter = "https://twitter.com/0xabc0"
 website = "http://eybisi.run/"
 
+[[results]]
+name = "Robert Bo Xiao"
+date = "2023-04-27 05:27:00"
+twitter = "https://twitter.com/nneonneo"
+github = "https://github.com/nneonneo"
 
 #[[results]]
 #name = "John Doe"
