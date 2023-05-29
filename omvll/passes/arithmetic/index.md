@@ -63,10 +63,10 @@ In the O-MVLL configuration file, you must define the following method in the Py
 ```python
 def obfuscate_arithmetic(self, mod: omvll.Module,
                                fun: omvll.Function) -> omvll.ArithmeticOpt:
-    if func.name == "encode":
+    if fun.name == "encode":
         # Explicitly define the number of iterations
         # applied on the arithmetic expressions
-        return omvll.ArithmeticOpt(iterations=8)
+        return omvll.ArithmeticOpt(rounds=8)
 
     if mod.name.endswith("encrypt.cpp"):
         # Obfuscate with a number of iteration defined by O-MVLL
@@ -75,7 +75,7 @@ def obfuscate_arithmetic(self, mod: omvll.Module,
     return False
 ```
 
-The `iteration` parameter defines the number of loops transforming the arithmetic operation:
+The `rounds` parameter defines the number of loops transforming the arithmetic operation:
 
 ```text
 Operation : X ^ Y

@@ -108,7 +108,7 @@ export CFLAGS="-fPIC -m64"
   --host=x86_64-linux-gnu   \
   --target=x86_64-linux-gnu \
   --build=x86_64-linux-gnu  \
-  --prefix=./install        \
+  --prefix=$(pwd)/install        \
   --disable-test-modules
 
 make -j$(nproc) install
