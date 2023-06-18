@@ -46,6 +46,12 @@ date = "2023-04-27 05:27:00"
 twitter = "https://twitter.com/nneonneo"
 github = "https://github.com/nneonneo"
 
+[[results]]
+name = "Nuno Silva & Korami"
+date = "2023-06-18 06:43:00"
+linkedin = "https://www.linkedin.com/in/nunosslva"
+website = "https://teamrocketist.github.io/"
+
 #[[results]]
 #name = "John Doe"
 #date = "2023-01-27 11:22:34"
