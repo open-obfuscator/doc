@@ -14,6 +14,10 @@ anime           = true
 countdown       = true
 typed           = true
 
+aliases = [
+    "/challenges/"
+]
+
 [colors]
   primary   = "#2aff2a"
   secondary = "#ff2a7f"
@@ -45,16 +49,13 @@ name = "Robert Bo Xiao"
 date = "2023-04-27 05:27:00"
 twitter = "https://twitter.com/nneonneo"
 github = "https://github.com/nneonneo"
+writeup_winner = true
+writeup = "2023_04_28-nneonneo"
 
 [[results]]
 name = "Nuno Silva & Korami"
 date = "2023-06-18 06:43:00"
 linkedin = "https://www.linkedin.com/in/nunosslva"
 website = "https://teamrocketist.github.io/"
-
-#[[results]]
-#name = "John Doe"
-#date = "2023-01-27 11:22:34"
-#writeup_winner = true
-#writeup = "https://write-up.pdf"
+writeup = "2023_07_24-korami"
 +++

@@ -1,3 +1,11 @@
++++
+headless = true
+
+[_build]
+  list = 'never'
+  render = 'never'
++++
+
 The objective of this challenge is to find the correct login/password that leads to **"Access Granted"**.
 
 The given Android application is protected with different layers of protections (obfuscation, RASP checks, ELF modifications)
