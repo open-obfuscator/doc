@@ -1,4 +1,9 @@
 publications:
+  - title: "Control Flow Flattening: How to build your own"
+    url: "https://www.lodsb.com/control-flow-flattening-how-to-build-your-own"
+    type: "blog"
+    authors: ["Sam Russell"]
+    date: 2023-08-18
   - title: "Approov Control Flow Unflattening"
     url: "https://eybisi.run/Control-Flow-Unflattening/"
     type: "blog"
