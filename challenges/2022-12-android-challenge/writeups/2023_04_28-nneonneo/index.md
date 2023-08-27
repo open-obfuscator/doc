@@ -88,6 +88,7 @@ void init_5(void)
 }
 ```
 <br />
+
 I recognize this as the [control-flow breaking](https://obfuscator.re/omvll/passes/control-flow-breaking/) pass from O-MVLL: this is a wrapper which uses opaque constants derived from the stack pointer to obfuscate the real address of the function (called at the end via `local_28`). The code uses the low bits of `sp`, which are always zero due to stack alignment, resulting in a constant result. However, since the decompiler does not make this assumption, it outputs the raw (obfuscated) calculations.
 
 Luckily, I have a trick: using `Set Register Values...` in Ghidra, we can just set `sp` to a concrete value (say, 0x7fff000b0000) at the start of the function, and Ghidra's constant propagation will do the rest:
