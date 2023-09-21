@@ -450,9 +450,10 @@ Windows
 
 ## Nightly Packages
 
-There is a CI for O-MVLL. For **all builds**, the packages are *nightly* uploaded at this address:
+There is a CI for O-MVLL. For **all builds**, the packages are *nightly* uploaded at the following addresses:
 
 - Nightly: [{{< get-var "omvll.nightly" >}}]({{< get-var "omvll.nightly" >}})
+- Experimental: [{{< get-var "omvll.experimental" >}}]({{< get-var "omvll.experimental" >}})
 - CI: [{{< get-var "omvll.github" >}}/actions]({{< get-var "omvll.github" >}}/actions)
 
 Thus, one can enjoy a beta version before waiting for a final release.
