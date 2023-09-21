@@ -34,7 +34,6 @@ $ cmake -GNinja ..                                              \
         -Dpybind11_DIR=${PYBIND11_ROOT}/share/cmake/pybind11    \
         -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
         -DLLVM_DIR=${LLVM_ROOT}/lib64/cmake/llvm                \
-        -DClang_DIR=${LLVM_ROOT}/lib64/cmake/clang
 $ ninja
 ```
 
@@ -43,14 +42,13 @@ $ ninja
 ```bash {hl_lines=3}
 # On OSX:
 $ cmake -GNinja ..                                              \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0"                    \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET="13.0"                    \
         -DPython3_ROOT_DIR=${PYTHON_ROOT}                       \
         -DPython3_LIBRARY=${PYTHON_ROOT}/lib/libpython3.10.a    \
         -DPython3_INCLUDE_DIR=${PYTHON_ROOT}/include/python3.10 \
         -Dpybind11_DIR=${PYBIND11_ROOT}/share/cmake/pybind11    \
         -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
         -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
-        -DClang_DIR=${LLVM_ROOT}/lib/cmake/clang
 $ ninja
 ```
 
@@ -69,7 +67,7 @@ All the dependencies are compiled from the Docker image: [`openobfuscator/omvll-
 
 | Version | URL                                                                                  |
 |---------|--------------------------------------------------------------------------------------|
-| `r25`   | [{{< get-var "omvll.prebuilt.ndk.r25" >}}]({{< get-var "omvll.prebuilt.ndk.r25" >}}) |
+| `r25c`   | [{{< get-var "omvll.prebuilt.ndk.r25c" >}}]({{< get-var "omvll.prebuilt.ndk.r25c" >}}) |
 
 ### Xcode
 
@@ -79,7 +77,7 @@ All the dependencies are compiled with both architectures: `arm64` & `x86-64` fr
 
 | Version  | URL                                                                                      |
 |----------|------------------------------------------------------------------------------------------|
-| `14.0.0` | [{{< get-var "omvll.prebuilt.xcode.v14" >}}]({{< get-var "omvll.prebuilt.xcode.v14" >}}) |
+| `14.1.0` | [{{< get-var "omvll.prebuilt.xcode.v14_1" >}}]({{< get-var "omvll.prebuilt.xcode.v14_1" >}}) |
 
 
 {{< admonition title="Compilation Time" icon="fa-light fa-rabbit-running" color="success">}}
@@ -192,12 +190,15 @@ Now, let's have a look at the compilation of LLVM.
 
 {{< hicon lvl=2 icon="fa-brands fa-android" >}}LLVM: Android NDK{{< /hicon >}}
 
-To compile O-MVLL for a given version of the Android NDK toolchain, we first need to identify the version of LLVM
-used by the given toolchain.
+To compile O-MVLL for a given version of the Android NDK toolchain, we should build the NDK plugin with
+the same toolchain that is used to build the NDK itself. This prevents us from future ABI idiosyncrasies.
+
+More specifically, the Android NDK is bootstrapped in a so-called 2-stage process. Stage-1 builds the compiler
+and all tools that are necessary to build the actual NDK plugin, whilst in stage-2 we use these newly-built tools
+to link the plugin against. As aforementioned, this guarantees ABI-compatibility with the target compiler.
 
 Let's consider that `$ANDROID_HOME` is pointing to the Android SDK root directory that contains the `ndk/`
 sub-directory:
-
 
 ```bash
 ls $ANDROID_HOME/ndk
@@ -207,12 +208,13 @@ ls $ANDROID_HOME/ndk
 ```
 
 If we aim at compiling O-MVLL for version `25.1.8937393` of the NDK, we can access the commit of the
-LLVM's fork used by Google by looking at the file `manifest_<number>.xml`.
+LLVM's fork used by Google by looking at the file `manifest_<number>.xml` (note that the plugin needs a release that
+is based on LLVM 14).
 
 This file is located in the toolchain directory:
 
 ```bash
-cat toolchains/llvm/prebuilt/linux-x86_64/manifest_8490178.xml
+cat toolchains/llvm/prebuilt/linux-x86_64/manifest_9352603.xml
 ```
 
 ```xml
@@ -224,90 +226,51 @@ cat toolchains/llvm/prebuilt/linux-x86_64/manifest_8490178.xml
 <!-- ... -->
 ```
 
-Based on this entry, we can clone the LLVM's fork with the specific commit as follows:
+Based on this entry, we can fetch the LLVM fork with that specific commit via the manifest file
+and proceed with the 2-stage build process as follows:
 
 ```bash
-git clone -j8 https://android.googlesource.com/toolchain/llvm-project
-cd llvm-project
-git checkout 4c603efb0cca074e9238af8b4106c30add4418f6
+mkdir android-llvm-toolchain-r25c && cd android-llvm-toolchain-r25c
+repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
+cp /path/to/manifest_9352603.xml .
+repo init -m manifest_9352603.xml
+repo sync -c
 ```
 
-Once the LLVM's fork repository is ready, we can start the (long) build process. By wrapping the process into
-a bash script, we can first declare the build parameters:
+Once the configuration step done, we can launch the compilation and enjoy a coffee :coffee: (or several):
 
 ```bash
-# O-MVLL only targets AArch64 but we need X86 for the JIT engine
-LLVM_TARGET="AArch64;X86"
-
-# Path to the LLVM repository previously cloned
-LLVM_SRC=<ROOT>/llvm-project
-
-# Where to build LLVM: /!\ IT REQUIRES ABOUT 30Go with RelWithDebInfo /!\
-BUILD_ROOT=$HOME/dev/o-mvll/build
+python3 toolchain/llvm_android/build.py --skip-tests
 ```
 
-Then we can define the CMake configuration step:
+Note that we do not need to finish the build and all the tests. We can abort it once we have 
+`out/stage1-install` and `out/stage2`. The following is the clang compiler we will use to **build** the plugin:
 
 ```bash
-echo "LLVM Android Version: $(git --git-dir=${LLVM_SRC}/.git describe --dirty)"
-
-cmake -GNinja
-      -S ${LLVM_SRC}/llvm                                     \
-      -B ${BUILD_ROOT}                                        \
-      -DCMAKE_BUILD_TYPE="Release"                            \
-      -DCMAKE_CXX_FLAGS="-stdlib=libc++"                      \
-      -DLLVM_ENABLE_LTO=OFF                                   \
-      -DLLVM_ENABLE_TERMINFO=OFF                              \
-      -DLLVM_ENABLE_THREADS=ON                                \
-      -DLLVM_USE_NEWPM=ON                                     \
-      -DLLVM_VERSION_PATCH=6                                  \
-      -DLLVM_LIBDIR_SUFFIX=64                                 \
-      -DLLVM_TARGET_ARCH=${LLVM_TARGET}                       \
-      -DLLVM_TARGETS_TO_BUILD=${LLVM_TARGET}                  \
-      -DLLVM_ENABLE_PROJECTS="clang;llvm"
+export NDK_STAGE1=$(pwd)/out/stage1-install
+$NDK_STAGE1/bin/clang --version | head -2
+Android (stage1, based on r450784d1) clang version 14.0.7 (https://android.googlesource.com/toolchain/llvm-project 4c603efb0cca074e9238af8b4106c30add4418f6)
+Target: x86_64-unknown-linux-gnu
 ```
 
-The purpose of the LLVM options is documented here: [llvm.org/docs/CMake](https://llvm.org/docs/CMake.html#options-and-variables)
-but some of them are worth more detail.
-
-### LLVM_VERSION_PATCH
-
-If we run the `clang` binary from the Android NDK to get its version, we likely observe this kind of output:
+Conversely, the stage-2 install-tree is what we link the plugin against. As a side effect, it provides the tools
+we use for testing as well:
 
 ```bash
-./toolchains/llvm/prebuilt/linux-x86_64/bin/clang --version
-Android [...] clang version 14.0.6
+export NDK_STAGE2=$(pwd)/out/stage2-install
+python3 $NDK_STAGE2/bin/llvm-lit --version
+lit 16.0.2
 ```
-We might think that the fork is based on LLVM `14.0.6` but actually Google set their **own patch version**:
 
-```python {hl_lines=2}
-...
-_patch_level       = '6'
-_svn_revision      = 'r450784d'
-_svn_revision_next = 'r450784'
-...
+Since option `--create-tar` of `build.py` script does not seem to create the package with all the tools needed, we
+are going to create the tarball ourselves. After cd'ing somewhere else in the filesystem, we just need to do:
+
 ```
-*From [https://android.googlesource.com/toolchain/llvm_android/android_version.py](https://android.googlesource.com/toolchain/llvm_android/+/5e4bbfa7bbdf0e5013fda78f18d1ee1345627fbc/android_version.py#22)*
-
-### LLVM_ENABLE_PROJECTS
-
-As it is discussed in [Strings Encoding]({{< ref "/omvll/passes/strings-encoding" >}}) and
-[LLVM JIT]({{< ref "/omvll/other-topics/jit" >}}), O-MVLL uses `libClang` and `ORCv2` to JIT C/C++ source code
-for the needs of obfuscation passes.
-Hence, we also need to compile clang and its libraries along with the main llvm libraries.
-
-### LLVM_LIBDIR_SUFFIX
-
-The NDK toolchain uses the `lib64/` default directory for the resolution of the native libraries.
-Therefore, we should match this behavior by setting: `-DLLVM_LIBDIR_SUFFIX=64`
-
-----
-
-Once the CMake configuration step done, we can launch the compilation and enjoy a coffee :coffee: (or several):
-
-```bash
-ninja -C ${BUILD_ROOT} package
--> It should produce: ${BUILD_ROOT}/LLVM-14.0.6git-Linux.tar.gz
+mkdir -p android-llvm-toolchain-r25c/out && cd android-llvm-toolchain-r25c/out
+cp -r ${NDK_STAGE1} .
+cp -r ${NDK_STAGE2} .
+cd .. && tar czf out.tar.gz out && rm -rf out
+cd .. && tar czf android-llvm-toolchain-r25c.tar.gz android-llvm-toolchain-r25c
 ```
 
 {{< hicon lvl=2 icon="fa-brands fa-apple" >}}LLVM: Xcode Toolchain{{< /hicon >}}
@@ -335,14 +298,10 @@ cmake -GNinja                                  \
       -B ${BUILD_ROOT}                         \
       -DCMAKE_BUILD_TYPE=Release               \
       -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-      -DCMAKE_OSX_DEPLOYMENT_TARGET="11.0"     \
-      -DLLVM_ENABLE_LTO=OFF                    \
-      -DLLVM_ENABLE_TERMINFO=OFF               \
-      -DLLVM_ENABLE_THREADS=ON                 \
-      -DLLVM_USE_NEWPM=ON                      \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET="13.0"     \
       -DLLVM_TARGET_ARCH=${LLVM_TARGET}        \
       -DLLVM_TARGETS_TO_BUILD=${LLVM_TARGET}   \
-      -DLLVM_ENABLE_PROJECTS="clang;llvm"
+      -DLLVM_ENABLE_PROJECTS="clang"
 ninja -C ${BUILD_ROOT} package
 -> It should produce: ${BUILD_ROOT}/LLVM-14.0.0git-Darwin.tar.gz
 ```
@@ -356,11 +315,11 @@ compile O-MVLL for both Android NDK and the Xcode toolchain.
 
 ```bash
 $ docker pull openobfuscator/omvll-ndk
-$ git clone https://github.com/open-obfuscator/o-mvll.git
+$ git clone {{< get-var "omvll.github" >}}
 
-$ curl -LO https://data.romainthomas.fr/omvll-deps-ndk-r25.tar
+$ curl -LO {{< get-var "omvll.prebuilt.ndk.r25c" >}}
 $ mkdir -p ./third-party
-$ tar xvf omvll-deps-ndk-r25.tar -C ./third-party
+$ tar xvf omvll-deps-ndk-r25c.tar -C ./third-party
 $ docker run --rm                           \
          -v $(pwd)/o-mvll:/o-mvll           \
          -v $(pwd)/third-party:/third-party \
@@ -369,20 +328,16 @@ $ docker run --rm                           \
 
 ### Xcode
 
-
 ```bash
 $ docker pull openobfuscator/omvll-xcode
 $ git clone {{< get-var "omvll.github" >}}
 
-$ curl -LO {{< get-var "omvll.prebuilt.xcode.v14" >}}
+$ curl -LO {{< get-var "omvll.prebuilt.xcode.v14_1" >}}
 $ mkdir -p ./third-party
-$ tar xvf omvll-deps-xcode-<version>.tar -C ./third-party
+$ tar xvf omvll-deps-xcode-14_1.tar -C ./third-party
 $ docker run --rm                           \
          -v $(pwd)/o-mvll:/o-mvll           \
          -v $(pwd)/third-party:/third-party \
          openobfuscator/omvll-xcode sh /o-mvll/scripts/docker/xcode_14_compile.sh
 
 ```
-
-
-

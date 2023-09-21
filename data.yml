@@ -9,6 +9,7 @@ omvll:
   github: https://github.com/open-obfuscator/o-mvll
   release: https://github.com/open-obfuscator/o-mvll/releases/
   nightly: http://nightly.obfuscator.re/latest/omvll
+  experimental: https://open-obfuscator.build38.io/ci/index.html
   api-doc: https://open-obfuscator.github.io/o-mvll
   version:
     tag: 1.0.0
@@ -26,8 +27,10 @@ omvll:
   prebuilt:
     ndk:
       r25: https://data.romainthomas.fr/omvll-deps-ndk-r25.tar
+      r25c: https://open-obfuscator.build38.io/static/omvll-deps-ndk-r25c.tar
     xcode:
       v14: https://data.romainthomas.fr/omvll-deps-xcode-14.tar
+      v14_1: https://open-obfuscator.build38.io/static/omvll-deps-xcode-14_1.tar
 dprotect:
   github: https://github.com/open-obfuscator/dprotect
   release: https://github.com/open-obfuscator/dprotect/releases/
