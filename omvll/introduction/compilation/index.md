@@ -25,7 +25,7 @@ $ mkdir o-mvll/src/build && cd o-mvll/src/build
 
 ##### On Linux
 
-```bash {hl_lines=2}
+```bash
 export NDK_STAGE1=${LLVM_ROOT}/out/stage1-install
 export NDK_STAGE2=${LLVM_ROOT}/out/stage2
 
@@ -45,7 +45,7 @@ $ ninja
 
 ##### On OSX
 
-```bash {hl_lines=3}
+```bash
 $ cmake   -GNinja                                                 \
           -S src                                                  \
           -B build                                                \
@@ -92,7 +92,7 @@ Since O-MVLL is an out-of-tree plugin, **it takes about 2 minutes** to fully com
 the pre-compiled dependencies).
 {{</ admonition >}}
 
-{{< hicon lvl=2 icon="fa-brands fa-python" >}}Generate NDK deps{{< /hicon >}}
+{{< hicon lvl=2 icon="fa-brands fa-android" >}}Generate NDK deps{{< /hicon >}}
 
 O-MVLL dependencies can be generated easily using the same repository:
 
@@ -107,7 +107,7 @@ git clone https://github.com/open-obfuscator/o-mvll.git o-mvll && cd o-mvll
 # output.tar.gz will be generated with all the required dependencies.
 ```
 
-{{< hicon lvl=2 icon="fa-light fa-input-text" >}}Generate XCode deps{{< /hicon >}}
+{{< hicon lvl=2 icon="fa-light fa-apple" >}}Generate XCode deps{{< /hicon >}}
 
 O-MVLL dependencies can be generated easily using the same repository:
 
