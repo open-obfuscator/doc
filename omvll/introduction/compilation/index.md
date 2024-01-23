@@ -107,7 +107,7 @@ git clone https://github.com/open-obfuscator/o-mvll.git o-mvll && cd o-mvll
 # output.tar.gz will be generated with all the required dependencies.
 ```
 
-{{< hicon lvl=2 icon="fa-light fa-apple" >}}Generate XCode deps{{< /hicon >}}
+{{< hicon lvl=2 icon="fa-brands fa-apple" >}}Generate XCode deps{{< /hicon >}}
 
 O-MVLL dependencies can be generated easily using the same repository:
 
