@@ -35,18 +35,19 @@ The kind of overhead introduced in the program when using the given obfuscation 
 
 ##### Public Attacks
 
-Whether it exists public attacks that could be applied to the current obfuscation. It is important to mention
-that, even though an attack could exist, it does not necessarily mean that
-the attack scale, and could be blindly applied to the protected binary.
+Whether there exist public attacks that could be applied to the current obfuscation, it is important to remember
+that, even though an attack may be put in place, it does not necessarily imply that
+the attack will scale and can be blindly applied to the protected binary.
 
 {{< hicon lvl=2 icon="fa-solid fa-user-ninja" >}}For Reverse Engineers{{< /hicon >}}
 
-First and foremost, **none** of these obfuscation passes is "unbreakable". That being said, we warmly welcome
-new attacks on these obfuscation techniques that could result in a complete **scalable** *deobfuscation*.
+First and foremost, **none** of these obfuscation passes unbreakable, nor are they meant to be.
+That said, we warmly welcome new attacks on these obfuscation techniques that could result in a complete **scalable** *deobfuscation*.
 
-For instance, we know that simple mixed boolean-arithmetic expressions (MBA) can be simplified with open-source
-tools like [mrphrazer/msynth](https://github.com/mrphrazer/msynth). Thus, given the [Arithmetic Obfuscation]({{< ref "/omvll/passes/arithmetic" >}}) pass
-applied to several *real* functions, could we manage to identify and create a pipeline to simplify the expressions?
+We are aware that simple mixed boolean-arithmetic expressions (MBA) may be simplified with open-source
+tools like [mrphrazer/msynth](https://github.com/mrphrazer/msynth). Thus,
+given the [Arithmetic Obfuscation]({{< ref "/omvll/passes/arithmetic" >}}) pass applied to several *real* functions,
+could we manage to identify and create a pipeline to simplify the expressions?
 
 If there is a new way to address this problem, we will love to reference this work in the associated documentation.
 If there also is an idea to circumvent your attack, feel free to open a PR or an issue that describes this

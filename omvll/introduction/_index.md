@@ -19,7 +19,7 @@ O-MVLL is an obfuscator based on LLVM that uses the new LLVM pass manager, `-fpa
 native code obfuscation. These obfuscation rules are driven by a Python API defined as follows:
 
 {{< alert type="danger" icon="fa-light fa-microchip">}}
-O-MVLL only supports and will only support the **AArch64 architecture**. This is a design choice.
+As of now, O-MVLL only supports the **AArch64 architecture**.
 {{</ alert >}}
 
 ```python
@@ -38,7 +38,4 @@ class MyConfig(omvll.ObfuscationConfig):
           return "REDACTED"
 ```
 
-
-
 {{< svg "/assets/omvll/omvll-pipeline.svg" >}}
-

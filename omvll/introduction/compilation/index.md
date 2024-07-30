@@ -8,7 +8,7 @@ weight      = 20
 
 O-MVLL relies on the following dependencies:
 
-1. LLVM (version depending on the toolchain's version)
+1. LLVM (version depending on the toolchain version)
 2. CPython ({{< get-var "omvll.dependencies.python.version" >}})
 3. spdlog ({{< get-var "omvll.dependencies.spdlog.version" >}})
 4. Pybind11 ({{< get-var "omvll.dependencies.pybind11.version" >}})
@@ -51,7 +51,7 @@ $ cmake   -GNinja                                                 \
           -B build                                                \
           -DCMAKE_C_COMPILER=$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang              \
           -DCMAKE_CXX_COMPILER=$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++            \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET="13.0"                    \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET="14.5"                    \
           -DPython3_ROOT_DIR=${PYTHON_ROOT}                       \
           -DPython3_LIBRARY=${PYTHON_ROOT}/lib/libpython3.10.a    \
           -DPython3_INCLUDE_DIR=${PYTHON_ROOT}/include/python3.10 \
@@ -59,7 +59,6 @@ $ cmake   -GNinja                                                 \
           -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
           -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
           -DPYBIND11_NOPYTHON=1                                   \
-          -DCMAKE_EXPORT_COMPILE_COMMANDS=On                      \
 $ ninja -C build
 ```
 
@@ -69,23 +68,24 @@ pre-compiled binaries:
 ### NDK
 
 {{< alert type="info" >}}
-All the dependencies are compiled from the Docker image: [`openobfuscator/omvll-ndk`](https://hub.docker.com/r/openobfuscator/omvll-ndk)
+All the dependencies are compiled from the Docker image: [`openobfuscator/omvll-ndk`](https://hub.docker.com/r/openobfuscator/omvll-ndk).
 {{</ alert >}}
 
 | Version | URL                                                                                  |
 |---------|--------------------------------------------------------------------------------------|
 | `r25c`   | [{{< get-var "omvll.prebuilt.ndk.r25c" >}}]({{< get-var "omvll.prebuilt.ndk.r25c" >}}) |
+| `r26d`   | [{{< get-var "omvll.prebuilt.ndk.r26d" >}}]({{< get-var "omvll.prebuilt.ndk.r26d" >}}) |
 
 ### Xcode
 
 {{< alert type="info" >}}
-All the dependencies are compiled with both architectures: `arm64` & `x86-64` from an Apple M1
+All the dependencies are compiled with both architectures: `arm64` & `x86-64` from an Apple M1.
 {{</ alert >}}
 
 | Version  | URL                                                                                      |
 |----------|------------------------------------------------------------------------------------------|
-| `14.1.0` | [{{< get-var "omvll.prebuilt.xcode.v14_1" >}}]({{< get-var "omvll.prebuilt.xcode.v14_1" >}}) |
-
+| `14.1` | [{{< get-var "omvll.prebuilt.xcode.v14_1" >}}]({{< get-var "omvll.prebuilt.xcode.v14_1" >}}) |
+| `15.2` | [{{< get-var "omvll.prebuilt.xcode.v15_2" >}}]({{< get-var "omvll.prebuilt.xcode.v15_2" >}}) |
 
 {{< admonition title="Compilation Time" icon="fa-light fa-rabbit-running" color="success">}}
 Since O-MVLL is an out-of-tree plugin, **it takes about 2 minutes** to fully compile the obfuscator (using
@@ -109,14 +109,8 @@ git clone https://github.com/open-obfuscator/o-mvll.git o-mvll && cd o-mvll
 
 {{< hicon lvl=2 icon="fa-brands fa-apple" >}}Generate XCode deps{{< /hicon >}}
 
-O-MVLL dependencies can be generated easily using the same repository:
-
-```bash
-git clone https://github.com/open-obfuscator/o-mvll.git o-mvll && cd o-mvll
-./scripts/deps/generate_deps.sh -p xcode -o output.tar.gz
-
-# output.tar.gz will be generated with all the required dependencies.
-```
+Manually generating the LLVM deps for Xcode is no longer supported.
+Please consider using the prebuilt dependencies instead.
 
 {{< hicon lvl=2 icon="fa-brands fa-docker" >}}Docker Build{{< /hicon >}}
 
@@ -129,13 +123,13 @@ compile O-MVLL for both Android NDK and the Xcode toolchain.
 $ docker pull openobfuscator/omvll-ndk
 $ git clone {{< get-var "omvll.github" >}}
 
-$ curl -LO {{< get-var "omvll.prebuilt.ndk.r25c" >}}
+$ curl -LO {{< get-var "omvll.prebuilt.ndk.r26d" >}}
 $ mkdir -p ./third-party
-$ tar xvf omvll-deps-ndk-r25c.tar -C ./third-party
+$ tar xvf omvll-deps-ndk-r26d.tar -C ./third-party
 $ docker run --rm                           \
          -v $(pwd)/o-mvll:/o-mvll           \
          -v $(pwd)/third-party:/third-party \
-         openobfuscator/omvll-ndk sh /o-mvll/scripts/docker/ndk_r25_compile.sh
+         openobfuscator/omvll-ndk sh /o-mvll/scripts/docker/ndk_r26d_compile.sh
 ```
 
 ### Xcode
@@ -144,12 +138,12 @@ $ docker run --rm                           \
 $ docker pull openobfuscator/omvll-xcode
 $ git clone {{< get-var "omvll.github" >}}
 
-$ curl -LO {{< get-var "omvll.prebuilt.xcode.v14_1" >}}
+$ curl -LO {{< get-var "omvll.prebuilt.xcode.v15_2" >}}
 $ mkdir -p ./third-party
-$ tar xvf omvll-deps-xcode-14_1.tar -C ./third-party
+$ tar xvf omvll-deps-xcode-15_2.tar -C ./third-party
 $ docker run --rm                           \
          -v $(pwd)/o-mvll:/o-mvll           \
          -v $(pwd)/third-party:/third-party \
-         openobfuscator/omvll-xcode sh /o-mvll/scripts/docker/xcode_14_compile.sh
+         openobfuscator/omvll-xcode sh /o-mvll/scripts/docker/xcode_15_compile.sh
 
 ```

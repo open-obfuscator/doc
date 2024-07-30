@@ -19,8 +19,8 @@ $ clang -fpass-plugin=OMVLL.{so, dylib} main.c -o main
 
 ### O-MVLL Configuration File
 
-Firstly, the O-MVLL's Python file is not always located next to the clang binary and we might want to change
-the name of the file.
+Firstly, the O-MVLL Python configuration file is not always located next to the clang binary and we might want
+to change the name of the file.
 
 By default, O-MVLL tries to import `omvll_config.py` from **the current directory** in which **clang is called**.
 If this file can't be resolved, it raises the following error:
@@ -406,12 +406,12 @@ Finally:
 ## iOS
 
 Using O-MVLL with Xcode is a bit easier than Android since we don't need to deal with different `libstdc++/libc++`.
-To enable O-MVLL, one needs to go to:
+To enable O-MVLL, one needs to set the following in Xcode:
 
 `Build Settings > Apple Clang - Custom Compiler Flags > Other C/C++ Flags`
 
-and add `-fpass-plugin=<path>/omvll_xcode_14.dylib`. We also need to disable the legacy pass manager with:
-`-fno-legacy-pass-manager`.
+and add `-fpass-plugin=<path>/omvll_xcode_15_2.dylib`. For versions targeting Xcode 14.5 and lower, the legacy pass manager
+needs to be disabled as well via `-fno-legacy-pass-manager`.
 
 Finally, we can create an `omvll.yml` file next to the `*.xcodeproj` file which defines `OMVLL_PYTHONPATH` and `OMVLL_CONFIG`.
 
@@ -439,7 +439,7 @@ $ python -m pip install [--user] omvll
 O-MVLL is currently tested and CI-compiled for the following configurations:
 
 - **Android NDK**: (Linux Debian Stretch)
-- **iOS**: OSX 11 (arm64 & x86-64)
+- **iOS**: macOS 14.5 (arm64 & x86-64)
 
 <center><strong class="text-danger">
 In particular, we did not test and we do not provide O-MVLL for cross-compiling Android projects on OSX and

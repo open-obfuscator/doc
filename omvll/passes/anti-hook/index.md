@@ -12,7 +12,7 @@ The purpose of this pass is to protect functions against hooking frameworks like
 {{< /pass_purpose >}}
 
 {{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass does not work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
+This pass is still a work in progress on **<u>iOS</u>**.
 {{< /alert >}}
 
 {{< compare "svg/anti-hook-1.svg" "svg/anti-hook-2.svg" "omvll">}}
@@ -41,7 +41,7 @@ bool has_secure_enclave() {
 
 ## When to use it?
 
-You should enable this protecting for all your sensitive functions. This pass introduces a very low overhead
+You may want to enable this for all sensitive functions. This pass introduces a very low overhead
 while still being efficient against Frida.
 
 ## How to use it?
@@ -59,7 +59,7 @@ def anti_hooking(self, mod: omvll.Module, func: omvll.Function) -> omvll.AntiHoo
 
 Usually, hooking frameworks need a scratch register to relocate or access metadata associated with the
 function currently hooked.
-In the case of Frida, the *relocator* needs one of the `x16`, `x17` registers as we can see in
+In the case of Frida, the *relocator* needs one of the `x16`, `x17` AArch64 registers as we can see in
 [gumarm64relocator.c](https://github.com/frida/frida-gum/blob/5fdc2952d753895ca9acd327e47e6aa1a395a332/gum/arch-arm64/gumarm64relocator.c#L521-L553)
 
 ```c
@@ -80,7 +80,7 @@ if (available_scratch_reg != NULL)
 }
 ```
 
-If the prologue of the function starts with instructions that used these two registers, Frida fails
+If the prologue of the function starts with instructions that use these two registers, Frida fails
 to hook the function. Let's consider the following Frida script:
 
 ```js
@@ -131,8 +131,8 @@ bool AntiHook::runOnFunction(llvm::Function &F) {
 }
 ```
 
-The prologue injected by the pass is located in a *`MemoryBuffer`* that is generated thanks to the O-MVLL's JIT engine
-(based on [LLVM ORCv2](https://llvm.org/docs/ORCv2.html)). With this Jitter, it generates the raw stub as follows:
+The prologue injected by the pass is located in a *`MemoryBuffer`* that is generated through the O-MVLL's JIT engine
+(based on [LLVM ORCv2](https://llvm.org/docs/ORCv2.html)). Within the Jitter, it generates the raw stub as follows:
 
 ```cpp
 std::unique_ptr<MemoryBuffer> Buffer = jitter->jitAsm(
@@ -159,7 +159,7 @@ and does not prevent other hooking frameworks like [Dobby](https://github.com/jm
 working correctly.
 
 If hooking really matters, we strongly recommend adding another detection layer to perform enhanced checks
-based -- for instance -- on the artifacts left by the different hooking frameworks.
+based – for instance – on the artifacts left by the different hooking frameworks.
 
 ## Origin of this pass
 
@@ -179,6 +179,3 @@ sha1_block_data_order:
   b.ne .Lv8_entry
   ...
 ```
-
-
-

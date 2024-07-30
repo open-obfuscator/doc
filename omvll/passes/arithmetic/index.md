@@ -15,10 +15,10 @@ The purpose of this pass is to transform arithmetic operations into complex expr
 
 ## When to use it?
 
-Arithmetic operations (`+, -, ^, &, |, ...`) are usually compiled into an AArch64 instruction that
-**exactly** matches the original operation[^opt].
+The majority of the time, arithmetic operations (`+, -, ^, &, |, ...`) are compiled into assembly instructions
+that **exactly** resemble the original operation[^opt].
 
-For instance, when we compile this function in which the `xor` operation is considered sensitive,
+For instance, consider the compilation of this function in which the `xor` operation is considered sensitive:
 
 ```cpp
 void encode(uint8_t* data, size_t len) {
@@ -28,7 +28,7 @@ void encode(uint8_t* data, size_t len) {
 }
 ```
 
-It results in this sequence of AArch64 instructions:
+The following sequence of AArch64 instructions is generated:
 
 ```armasm {hl_lines=4}
 mov     w10, #35
@@ -38,11 +38,11 @@ eor     w11, w11, w10
 strb    w11, [x9], #1
 ```
 
-From a reverse engineering perspective, the sensitive xor operation associated with the `EOR` instruction is
-straightforward to identify.
+From a reverse engineering perspective, the sensitive xor operation associated with the `EOR` instruction can
+be straightforwardly identified.
 
-Thus, if you consider that the arithmetic operations performed by your function are sensitive, you
-should consider enabling this obfuscation pass.
+Thus, if you reckon that the arithmetic operations performed by your function may be sensitive, you
+may want to consider enabling this obfuscation pass.
 
 As a result, when this obfuscation pass is enabled, the previous operation is transformed into a
 more complex expression:
@@ -123,7 +123,7 @@ int b = __omvll_add(x, y);
 
 *"Why doing such transformation and not directly replacing the addition with its MBA equivalent?"*
 
-First, LLVM is able to simplify MBA as it is discussed in the next section: [Limitation & Attacks](#limitations--attacks).
+First, the compiler itself is able to simplify MBA as it is discussed in the next section: [Limitation & Attacks](#limitations--attacks).
 One solution to prevent these optimizations is to create a function flagged with the attribute `OptimizeNone`,
 which is roughly equivalent to:
 
@@ -135,7 +135,7 @@ int __omvll_add(int x, int y) {
 ```
 
 {{< alert type="info" icon="fa-light fa-seal" >}}
-As far I know, it does not exist an equivalent for basic blocks or instructions.
+There does not exist an equivalent attribute for basic blocks or instructions.
 {{</ alert >}}
 
 The second advantage of this call-transformation lies in the implementation of the iteration process.
@@ -198,7 +198,7 @@ return BinaryOperator::CreateSub(
 );
 ```
 
-The overall structure of the *transformer* is highly inspired by the [InstCombine](https://github.com/llvm/llvm-project/tree/17f2ee804a3c50f0b50d57a0100ce9f4102bfa3f/llvm/lib/Transforms/InstCombine) pass
+The overall structure of the *transformer* is highly inspired by the [InstructionCombining](https://github.com/llvm/llvm-project/blob/main/llvm/lib/Transforms/InstCombine/InstructionCombining.cpp) pass
 and the MBA used in this pass are taken from [sspam](https://github.com/quarkslab/sspam/blob/6784e1c06157c6984ef04b67382e584d4b5316e0/sspam/simplifier.py#L30-L53)
 developed by Ninon Eyrolles:
 
@@ -213,8 +213,8 @@ developed by Ninon Eyrolles:
 
 ## Limitations & Attacks
 
-First and foremost, LLVM is able to *simplify* MBA as we can see in the file
-`llvm/lib/Transforms/InstCombineAndOrXor.cpp`
+First and foremost, LLVM is able to *simplify* some MBAs as we can see from
+`llvm/lib/Transforms/InstCombine/InstCombineAndOrXor.cpp`:
 
 ```cpp
 ...
@@ -241,7 +241,7 @@ if (match(Op0, m_Xor(m_Value(A), m_Value(B))) &&
 ...
 ```
 
-Hence, we must be careful to not trigger these simplifications (c.f. [Implementation](#implementation))
+Hence, we must be careful not to trigger these simplifications (c.f. [Implementation](#implementation))
 
 Second, the MBA currently used in this pass are:
 
@@ -256,7 +256,7 @@ Nevertheless, **automatically** identifying **AND** extracting MBAs from a compi
 so we can consider that this pass introduces a non-negligible overhead for the reverse engineers.
 
 For these reasons and, in its current form, this pass should be considered as a *cosmetic protection* rather
-than a state-of-the-art protection.
+than an advanced protection.
 
 ## References
 
@@ -265,5 +265,4 @@ than a state-of-the-art protection.
 [^opt]: The compiler might also optimize the operation into instructions that are equivalent but
         less meaningful from a reverse engineering perspective. For instance, `x % 8` is usually transformed in `x & 7`.
         [Hacker's Delight](https://www.oreilly.com/library/view/hackers-delight-second/9780133084993/) is a good
-        reference for this kind of transformation.
-
+        reference for this kind of transformations.

@@ -11,7 +11,6 @@ img_compare = true
 The purpose of the pass is to protect strings from a static analysis.
 {{< /pass_purpose >}}
 
-
 Strings, along with constants and symbols, are the kind of information that are quickly accessible
 and very efficient in reverse engineering to guess or infer the purpose of a function.
 
@@ -50,7 +49,7 @@ libm.so
 ...
 ```
 
-To remove this unwanted string, we first need -- as for all the obfuscation passes -- to define the
+To remove this unwanted string, we first need – as for the other obfuscation passes – to define the
 associated function, `obfuscate_string`, in the configuration class:
 
 ```python
@@ -81,7 +80,7 @@ The redacted string can be confirmed in the decompiled output:
 
 {{< img-diff "img/redacted.webp" "img/leak.webp" "omvll">}}
 
-Let's now consider that instead of removing a string, we want to protect it:
+Let's now consider the case where, instead of removing a string, we want to protect it:
 
 ```cpp {hl_lines="2-7"}
 bool check_code(int code) {
@@ -99,12 +98,13 @@ bool check_code(int code) {
   return true;
 }
 ```
-In this updated version of `check_code()`, the function prints a message that aims
+
+In this updated version of `check_code()`, the function prints a message that requires
 to be protected. Since this string is **large** and **not really sensitive**,
 it is recommended to protect this string with the O-MVLL option: `StringEncOptGlobal()`.
 
 {{< alert type="info" icon="fa-light fa-list-tree" >}}
-All the options accepted by this function are synthesized at the end of this section
+All the options accepted by this function are synthesized at the end of this section.
 {{</ alert >}}
 
 We can trigger this kind of protection as follows:
@@ -141,11 +141,11 @@ and execution time.
 
 On the other hand, the clear string is present in memory as soon as the binary is loaded
 which makes it easily accessible through a memory dump. This limitation is discussed in the section
-[Limitations](#limitations)
+[Limitations](#limitations).
 
 {{< /admonition >}}
 
-Now let's consider that we are looking for a better level of protection. The `.data` section
+Now let's evalutate the options that provide a better level of protection. The `.data` section
 is easy to dump during the execution of the binary so it is not the best spot to decode a sensitive string.
 
 
@@ -225,10 +225,9 @@ It is also worth highlighting some aspects of this protection:
 
 So in the end, the compiled and protected binary looks like this:
 
-
 {{< img-diff "img/inline.webp" "img/clear.webp" "omvll">}}
 
-As we can notice, this option **drastically** increases the code's size for which
+As we can notice, this option **drastically** increases the code size for which
 **the overhead is proportional** to the original length of the string.
 
 {{< alert type="danger" icon="fa-regular fa-arrow-up-big-small" >}}
@@ -476,7 +475,7 @@ G.setInitializer(StrEnc);
 ```
 
 In its current implementation, the `encode/decode` functions are statically written in the code of the pass,
-but we could also imagine supporting routines provided by the user through the Python API:
+but we could also imagine supporting routines provided by the user through Python APIs:
 
 ```python
 def obfuscate_string(self, _, __, string: bytes):
@@ -490,7 +489,7 @@ You can find more details about the JIT engine used in O-MVLL in the section [LL
 
 ### StringEncOptStack Looped
 
-If the user returns the option `StringEncOptStack` for which the string is eligible to a loop, the pass
+If the option `StringEncOptStack` is provided, for which the string is eligible to a loop, the pass
 starts by allocating a buffer:
 
 ```cpp
@@ -500,7 +499,6 @@ AllocaInst* clearBuffer = IRB.CreateAlloca(IRB.getInt8Ty(),
 ```
 
 Then it injects the decoding routine using the same JIT-technique as [StringEncOptGlobal](#StringEncOptGlobal).
-
 
 Finally, it replaces the original instruction's operand -- which referenced the clear string -- with the new stack buffer:
 

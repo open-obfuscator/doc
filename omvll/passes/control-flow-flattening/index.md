@@ -183,7 +183,7 @@ Thus, we can leverage this basic block to put instructions that are confusing fo
 ## Limitations
 
 This pass modifies the **sequence** of the basic blocks to hinder the overall structure of the function,
-**BUT**: It does not protect the code of the individual basic blocks.
+**BUT** it does not protect the code of the individual basic blocks.
 
 This means that a reverse
 engineer can still analyze the function at a basic block level to potentially extract the original logic.

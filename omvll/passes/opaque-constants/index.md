@@ -8,13 +8,13 @@ img_compare = true
 {{< hicon lvl=1 icon="fa-regular fa-input-numeric" >}}Opaque Constants{{< /hicon >}}
 
 {{< pass_purpose >}}
-The purpose of this pass is to protect constants using opaque values
+The purpose of this pass is to protect constants using opaque values.
 {{< /pass_purpose >}}
 
 {{< compare "svg/opaque-cst-1.svg" "svg/opaque-cst-2.svg" "omvll">}}
 
-While reverse engineering binary, clear strings, symbols, and integer constants are important information
-that is used to quickly infer the purpose of a function.
+While statically reverse engineering binaries, plain strings, symbols, and integer constants
+are crucial information that can be used to quickly infer the purpose of a function.
 
 This pass protects integer constants by using opaque operations.
 
@@ -39,7 +39,7 @@ class Config(omvll.ObfuscationConfig):
 
 The returned values of this method depend on which constants should be protected.
 Let's take a real example with the SHA-256 initialization routine. Usually, this routine
-initializes a buffer with the SHA-256 constants. For instance, in mbedtls it is implemented as follows:
+initializes a buffer with the SHA-256 constants. For instance, in `mbedtls` it is implemented as follows:
 
 ```cpp
 int mbedtls_sha256_starts(mbedtls_sha256_context *ctx, int is224) {
@@ -91,7 +91,7 @@ Indeed, most of the cryptographic libraries follow this pattern for a given algo
 2. `update()`
 3. `finalize()`
 
-Therefore, using cross-references, a reverse engineer could easily identify the other functions (update, finalize, ...)
+Therefore, using cross-references, the other functions (update, finalize, ...) may be easily identified.
 {{< /alert >}}
 
 To protect **all the constants**, we can return `True` from the configuration callback:
@@ -186,8 +186,8 @@ uint64_t RHS = Split;       // Part 2
 ```
 
 Then, the pass generates IR instructions to reconstruct the original value. This
-reconstruction is essentially an addition between `LHS` and `RHS` and to prevent
-a "constant propagation", it uses two intermediate variables:
+reconstruction is essentially an addition between `LHS` and `RHS`, and it uses two intermediate
+variables to prevent constant propagation optimizations:
 
 1. `__omvll_opaque_gv`
 2. `__omvll_opaque_stack_allocated`

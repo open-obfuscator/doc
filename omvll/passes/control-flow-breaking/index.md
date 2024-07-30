@@ -8,23 +8,23 @@ img_compare = true
 {{< hicon lvl=1 icon="fa-regular fa-chart-tree-map" >}}Control-Flow Breaking{{< /hicon >}}
 
 {{< pass_purpose >}}
-The purpose of this pass is the break the control-flow representation.
+The purpose of this pass is to break the control-flow representation.
 {{< /pass_purpose >}}
 
 {{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass does not work well for **<u>iOS</u>** because of an internal issue in the setup of the JIT Engine.
+This pass is currently not supported on **<u>iOS</u>**.
 {{< /alert >}}
 
 {{< compare "svg/control-flow-breaking-1.svg" "svg/control-flow-breaking-2.svg" "omvll">}}
 
 Control-Flow representation is an important piece of information for reverse engineers as it is used to
-represent elementary computational block (or basic block) and how they are related to each other.
+represent elementary computational block (or basic block) and how they relate to each other.
 
-A large part of the decompilation process relies on this control flow representation, and the disassembler
+A large part of the decompilation process relies on such a control flow representation, and the disassembler
 will likely fail the decompilation if it does not manage to determine the control-flow graph of the function.
 
-The idea of this pass is to inject custom and non-executed instructions at the beginning of the function
-which is breaking -- to some extent -- the analysis of the disassemblers.
+The idea of this pass is to inject custom and non-executing instructions at the beginning of the function
+which break and unalign – to some extent – the analysis of the disassemblers.
 
 Here are the results with IDA and BinaryNinja:
 
@@ -52,7 +52,7 @@ With manual actions, Ghidra manages to recover the function but misses the first
 
 ## When to use it?
 
-If you consider that a function is sensitive, you should enable this pass. This protection has the
+If you consider that a function is sensitive, you may want to enable this pass. This protection has the
 advantage to introduce a **very low overhead** on the execution and the binary's size while being pretty efficient
 against decompilation and static analysis.
 

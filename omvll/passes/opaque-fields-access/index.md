@@ -11,10 +11,13 @@ img_compare = true
 The purpose of the pass is to obfuscate the access of structure's fields.
 {{< /pass_purpose >}}
 
+{{< alert type="warning" icon="fa-thin fa-user-helmet-safety">}}
+This pass is still a work in progress.
+{{</ alert >}}
+
 {{< compare "svg/opaque-field-1.svg" "svg/opaque-field-2.svg" "omvll">}}
 
-
-As mentioned in a talk by R. Rolles about [*Automation Techniques in C++ Reverse Engineering*](https://static1.squarespace.com/static/53a64cc2e4b0c63fc41a3320/t/5d48d619208ae80001a24efc/1565054491140/CPP+Dynamic+Type+Recovery.pdf),
+As mentioned in the talk [*Automation Techniques in C++ Reverse Engineering*](https://static1.squarespace.com/static/53a64cc2e4b0c63fc41a3320/t/5d48d619208ae80001a24efc/1565054491140/CPP+Dynamic+Type+Recovery.pdf) by R. Rolles,
 reverse engineers spend a non-negligible amount of time to identify structures and their attributes:
 
 {{< blockquote who="Rolf Rolles" where="Automation Techniques in C++ Reverse Engineering">}}

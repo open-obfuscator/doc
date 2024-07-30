@@ -28,9 +28,11 @@ omvll:
     ndk:
       r25: https://data.romainthomas.fr/omvll-deps-ndk-r25.tar
       r25c: https://open-obfuscator.build38.io/static/omvll-deps-ndk-r25c.tar
+      r26d: https://open-obfuscator.build38.io/static/omvll-deps-ndk-r26d.tar
     xcode:
       v14: https://data.romainthomas.fr/omvll-deps-xcode-14.tar
       v14_1: https://open-obfuscator.build38.io/static/omvll-deps-xcode-14_1.tar
+      v15_2: https://open-obfuscator.build38.io/static/omvll-deps-xcode-15_2.tar
 dprotect:
   github: https://github.com/open-obfuscator/dprotect
   release: https://github.com/open-obfuscator/dprotect/releases/
@@ -45,4 +47,3 @@ dprotect-core:
   github: https://github.com/open-obfuscator/dprotect-core
   release: https://github.com/open-obfuscator/dprotect-core/releases/
   nightly: http://nightly.obfuscator.re/latest/dprotect
-
