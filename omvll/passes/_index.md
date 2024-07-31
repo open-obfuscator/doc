@@ -41,7 +41,7 @@ the attack will scale and can be blindly applied to the protected binary.
 
 {{< hicon lvl=2 icon="fa-solid fa-user-ninja" >}}For Reverse Engineers{{< /hicon >}}
 
-First and foremost, **none** of these obfuscation passes unbreakable, nor are they meant to be.
+First and foremost, **none** of these obfuscation passes is unbreakable, nor are they meant to be.
 That said, we warmly welcome new attacks on these obfuscation techniques that could result in a complete **scalable** *deobfuscation*.
 
 We are aware that simple mixed boolean-arithmetic expressions (MBA) may be simplified with open-source
