@@ -6,8 +6,9 @@ weight      = 10
 
 # Getting Started
 
-O-MVLL is an **AArch64** obfuscator designed to work with Android and iOS toolchains.
-Theoretically, it could be run as simply as using the `-fpass-plugin=` compiler flag:
+O-MVLL is a code obfuscator based on LLVM and designed to work with Android and iOS toolchains.
+It supports AArch64 and AArch32 as target architectures. Theoretically, it could be run as
+simply as using the compiler flag `-fpass-plugin=`, as follows:
 
 ```cpp
 # Create/edit './omvll_config.py' to configure the obfuscator and run:
@@ -237,12 +238,7 @@ android {
 There are important options associated with this configuration:
 
 - `ndkVersion` must match the NDK version for which O-MVLL has been downloaded.
-- `ndk.abiFilters` must **always** be `'arm64-v8a'` since O-MVLL **only supports this architecture**.
-
-{{< alert type="success" icon="fa-regular fa-option" >}}
-As a side effect of only supporting `AArch64`, a released APK that only embeds `arm64-v8a` native libraries
-is a simple way to limit code emulation and code lifting.
-{{</ alert >}}
+- `ndk.abiFilters` must be `'arm64-v8a'` or `'armeabi-v7a'`, since O-MVLL supports these architectures.
 
 In addition, we might need to satisfy the environment variables mentioned previously
 (`LD_LIBRARY_PATH`, `OMVLL_CONFIG`, ...).
