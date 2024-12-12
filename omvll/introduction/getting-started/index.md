@@ -238,7 +238,11 @@ android {
 There are important options associated with this configuration:
 
 - `ndkVersion` must match the NDK version for which O-MVLL has been downloaded.
-- `ndk.abiFilters` must be `'arm64-v8a'` or `'armeabi-v7a'`, since O-MVLL supports these architectures.
+- `ndk.abiFilters` must be `'arm64-v8a'` and/or `'armeabi-v7a'`, since O-MVLL supports these architectures.
+{{< alert type="success" icon="fa-regular fa-option" >}}
+As a side effect of only supporting arm architecures, a released APK that only embeds `arm*` native libraries
+is a simple way to limit code emulation and code lifting.
+{{</ alert >}}
 
 In addition, we might need to satisfy the environment variables mentioned previously
 (`LD_LIBRARY_PATH`, `OMVLL_CONFIG`, ...).
