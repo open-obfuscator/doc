@@ -149,15 +149,10 @@ Now let's evalutate the options that provide a better level of protection. The `
 is easy to dump during the execution of the binary so it is not the best spot to decode a sensitive string.
 
 
-*-> What about the stack? <i class="fa-solid fa-face-raised-eyebrow"> </i>*
+*-> What about the strings local to a function? <i class="fa-solid fa-face-raised-eyebrow"> </i>*
 
-The stack has interesting anti-dump properties for this operation:
-
-1. The stack frame is local to a function (i.e not global as the `data` section)
-2. The address where the string is decoded on the stack is not fixed at compile time
-   (compare to the **relative** virtual address of the data section)
-
-So the idea is to decode the string (from the `data` section) directly on the stack.
+It turns out that, we can decode mutable strings (i.e., coming from `data` section)
+and constant strings directly within the function itself.
 
 Let's consider this new version of the `check_code` function:
 
@@ -171,7 +166,7 @@ bool check_code(int code, const char* passwd) {
 
   printf("%s\n", BANNER);
 
-  const char PASS[] = "OMVLL";
+  char PASS[] = "OMVLL";
   if (code != 47839 || strncmp(passwd, PASS, 6)) {
     LOG_ERROR("Wrong input");
     return false;
@@ -180,8 +175,8 @@ bool check_code(int code, const char* passwd) {
 }
 ```
 
-If we want to protect the `"OMVLL"` string through a stack decoding, we can return the
-`StringEncOptStack`:
+If we want to protect the `"OMVLL"` string through a local decoding, we can leverage the
+`StringEncOptLocal` option:
 
 ```python {hl_lines="8-9"}
 def obfuscate_string(self, _, __, string: bytes):
@@ -192,7 +187,7 @@ def obfuscate_string(self, _, __, string: bytes):
         return omvll.StringEncOptGlobal()
 
     if string == b"OMVLL":
-        return omvll.StringEncOptStack()
+        return omvll.StringEncOptLocal()
 ```
 
 With such an option, `b"OMVLL"` will be decoded as follows:
@@ -200,7 +195,7 @@ With such an option, `b"OMVLL"` will be decoded as follows:
 ```cpp {hl_lines="4-9"}
 const char ENC_OMVLL = "\x1a\x9A\x21\x79\x37\x02";
 bool check_code(int code) {
-  char OMVLL_DECODED[6];
+  static char OMVLL_DECODED[6];
   OMVLL_DECODED[1] = ENC_OMVLL[1] ^ 0xd7;
   OMVLL_DECODED[5] = ENC_OMVLL[5] ^ 0x02;
   OMVLL_DECODED[2] = ENC_OMVLL[2] ^ 0x77;
@@ -214,10 +209,11 @@ bool check_code(int code) {
 }
 ```
 
-As we can observe, a stack buffer with the same size as the original string is allocated on the stack.
+As we can observe, a global buffer local to the function with the same size
+as the original string is materialized in the IR.
 It is also worth highlighting some aspects of this protection:
 
-1. The indexes of the stack buffer where the `'char'` is decoded are shuffled.
+1. The indexes of the buffer where the `'char'` is decoded are shuffled.
 2. The keystream used for decoding the string is unique.
 3. The memory accesses of both, `OMVLL_DECODED` and `ENC_OMVLL` are protected with [Opaque Fields Access]({{< ref "/omvll/passes/opaque-fields-access" >}}).
 4. The `xor` operation is protected with [Arithmetic Obfuscation]({{<ref "/omvll/passes/arithmetic" >}}).
@@ -227,76 +223,14 @@ So in the end, the compiled and protected binary looks like this:
 
 {{< img-diff "img/inline.webp" "img/clear.webp" "omvll">}}
 
-As we can notice, this option **drastically** increases the code size for which
-**the overhead is proportional** to the original length of the string.
+While the option **drastically** increases the code size for which
+**the overhead is proportional** to the original length of the string, the decoding
+is performed once and lazily (upon visiting the string).
 
 {{< alert type="danger" icon="fa-regular fa-arrow-up-big-small" >}}
-For these reasons and to avoid an important overhead, it is recommended to enable
-this option on **small and very sensitive** strings.
+As a general tip, to avoid huge performance penalties, it is recommended to enable
+this option on **sensitive-only** strings.
 {{</ alert >}}
-
-Since this `StringEncOptStack` option can introduce **a non-negligible overhead** on large strings,
-there is the possibility to tweak this protection by transforming the inlined decoding instructions into a loop:
-
-```python {hl_lines="9"}
-def obfuscate_string(self, _, __, string: bytes):
-  if string.startswith(b"/home") and string.endswith(b".cpp"):
-    return "REDACTED"
-
-  if b"Hello gentle reverse" in string:
-    return omvll.StringEncOptGlobal()
-
-  if string == b"OMVLL":
-    return omvll.StringEncOptStack(loopThreshold=0)
-```
-
-With this new `loopThreshold=0`, decoding of `b"OMVLL"` within `check_code` becomes:
-
-```cpp {hl_lines="4-6"}
-const char ENC_OMVLL = "\x1a\x9A\x21\x79\x37\x02";
-bool check_code(int code) {
-  char OMVLL_DECODED[6];
-  for (size_t i = 0; i < 6; ++i) {
-    OMVLL_DECODED[i] = ENC_OMVLL[i] ^ KEY[i];
-  }
-
-  if (code != 47839 || strncmp(passwd, OMVLL_DECODED, 6)) {
-    ...
-  }
-}
-```
-
-In doing so, the function which uses the string does not pay the cost of the inlined instructions. In the
-current design of the pass (which aims at being improved):
-
-1. The key is a random `uint64_t` integer protected with [Opaque Constants]({{<ref "/omvll/passes/opaque-constants" >}}).
-2. The `xor` operation is protected with MBA.
-3. The previous operation changes pseudo-randomly.
-
-In other words, it follows this layout:
-
-```cpp
-const char ENC_OMVLL = "\x1a\x9A\x21\x79\x37\x02";
-bool check_code(int code) {
-  char OMVLL_DECODED[6];
-  uint64_t KEY = Random();
-  for (size_t i = 0; i < 6; ++i) {
-    OMVLL_DECODED[i] = Op(ENC_OMVLL[i], KEY, i);
-  }
-
-  if (code != 47839 || strncmp(passwd, OMVLL_DECODED, 6)) {
-    ...
-  }
-}
-```
-
-On the final binary, it produces these changes:
-
-{{< img-diff "img/loop.webp" "img/clear.webp" "omvll">}}
-
-Compares to the inlined stack decoding routine, this loop avoids the linear relationship between
-the string's length and the code generated for its protection. Thus, this option can be triggered when
-the string to protect is medium-sized and sensitive.
 
 From an implementation perspective, the loop is dynamically jitted **from C code** which is something
 pretty new compared to the other LLVM-based obfuscator. Feel free to jump on [Implementation](#implementation)
@@ -309,14 +243,12 @@ Here is the table that summarizes the different options:
 | `False, None`                      | None       | None                                           |
 | `True`                             | Depends    | Depends                                        |
 | `StringEncOptGlobal`               | Medium     | Low                                            |
-| `StringEncOptStack(loopThreshold)` | Medium++   | Medium                                         |
-| `StringEncOptStack()`              | High       | Medium for small string, High for long strings |
-
+| `StringEncOptLocal`                | High       |
+High |
 
 ## When to use it?
 
-This pass should always be enabled on your code, at least for checking and removing debug information or leaks
-from macros.
+This pass should always be enabled on your code, at least for checking and removing debug information or leaks from macros.
 
 For the other aspects of your code, you should consider enabling this protection for sensitive strings like
 API Token (if any), log messages, secrets, etc.
@@ -344,7 +276,7 @@ Constant* StrEnc = ConstantDataArray::get(BB.getContext(), encoded);
 G.setInitializer(StrEnc);
 ```
 
-Then, it injects the decoding function as a constructor of the current `llvm::Module`:
+Then, it injects the decoding function as a global constructor within the current `llvm::Module`:
 
 ```cpp
 std::string Id = G.getGlobalIdentifier();
@@ -388,7 +320,8 @@ In our implementation, the name of the constructor comes from `getGlobalIdentifi
 Return the modified name for this global value suitable to be used as the key for a global lookup (e.g. profile or ThinLTO).
 {{< / blockquote >}}
 
-but in most of the O-LLVM's forks the name of the constructor is set as follows:
+but we do take care of hashing the global identifier. Conversely, in most of the O-LLVM's forks
+the name of the constructor is set as follows:
 
 ```cpp
 uint64_t StringObfDecodeRandomName = cryptoutils->get_uint64_t();
@@ -487,85 +420,34 @@ def obfuscate_string(self, _, __, string: bytes):
 
 You can find more details about the JIT engine used in O-MVLL in the section [LLVM JIT]({{< ref "/omvll/other-topics/jit" >}}).
 
-### StringEncOptStack Looped
+### StringEncOptLocal
 
-If the option `StringEncOptStack` is provided, for which the string is eligible to a loop, the pass
-starts by allocating a buffer:
+If the option `StringEncOptLocal` is provided, for which the string is eligible to be obfuscated, the pass
+starts by allocating a global buffer:
 
 ```cpp
-AllocaInst* clearBuffer = IRB.CreateAlloca(IRB.getInt8Ty(),
-                                           IRB.getInt32(str.size()));
+GlobalVariable *ClearBuffer =
+      new GlobalVariable(*M, BufferTy, false, GlobalValue::InternalLinkage,
+                         Constant::getNullValue(BufferTy));
 
 ```
 
 Then it injects the decoding routine using the same JIT-technique as [StringEncOptGlobal](#StringEncOptGlobal).
 
-Finally, it replaces the original instruction's operand -- which referenced the clear string -- with the new stack buffer:
+Finally, it replaces the original instruction's operand -- which referenced the clear string -- with the new buffer:
 
 ```cpp
-I.setOperand(Op.getOperandNo(), clearBuffer);
+I.setOperand(Op.getOperandNo(), ClearBuffer);
 ```
 
-### StringEncOptStack Inline
-
-If the string must be inline-decoded on stack, the pass starts by allocating a buffer:
-
-```cpp
-AllocaInst* clearBuffer = IRB.CreateAlloca(IRB.getInt8Ty(),
-                                           IRB.getInt32(str.size()));
-```
-
-Then, the pass loops over the (shuffled) indexes of the string to individually create IR instructions that
-decode the characters:
-
-```cpp
-for (size_t i = 0; i < str.size(); ++i) {
-  Value *EncGEP = IRB.CreateGEP(..., encBuffer  , ...);
-  Value* DecGEP = IRB.CreateGEP(..., clearBuffer, ...);
-
-  // Load the encoded character and its key
-  LoadInst* EncVal = IRB.CreateLoad(IRB.getInt8Ty(), EncGEP);
-  LoadInst* KeyVal = IRB.CreateLoad(...);
-
-  // Create the decode operation
-  Value* DecVal = IRB.CreateXor(EncVal, KeyVal);
-
-  // Store the decoded character
-  StoreInst* StoreClear = IRB.CreateStore(DecVal, DecGEP);
-}
-```
-
-Without any additional protections, these IR-created instructions would be very easy to reverse. That's why
-the pass also adds custom annotations (c.f. [Obfuscation Annotations]({{< ref "/omvll/other-topics/annotations" >}}))
-to trigger other O-MVLL obfuscations:
-
-```cpp {hl_lines=[7, 10, 14, 18]}
-for (size_t i = 0; i < str.size(); ++i) {
-  Value *EncGEP = IRB.CreateGEP(..., encBuffer  , ...);
-  Value* DecGEP = IRB.CreateGEP(..., clearBuffer, ...);
-
-  // Load the encoded character and its key
-  LoadInst* EncVal = IRB.CreateLoad(IRB.getInt8Ty(), EncGEP);
-  addMetadata(*EncVal, MetaObf(PROTECT_FIELD_ACCESS));
-
-  LoadInst* KeyVal = IRB.CreateLoad(...);
-  addMetadata(*KeyVal, MetaObf(PROTECT_FIELD_ACCESS));
-
-  // Create the decode operation
-  Value* DecVal = IRB.CreateXor(EncVal, KeyVal);
-  addMetadata(*DecVal, MetaObf(OPAQUE_OP, 2llu));
-
-  // Store the decoded character
-  StoreInst* StoreClear = IRB.CreateStore(DecVal, DecGEP);
-  addMetadata(*StoreClear, MetaObf(PROTECT_FIELD_ACCESS));
-}
-```
+An additional global variable is introduced to track whether the string has already been decoded.
+If it has not, the decoding process is then carried out.
 
 ## Limitations
 
 As already mentioned at the beginning, a string protected with the option `StringEncOptGlobal` can be
-easily recovered by dumping the `data` section once the binary is loaded. On the other hand, strings
-protected with the `StringEncOptStack` option are not subject to the dump attack but they could be recovered
+easily recovered by dumping the `data` section once the binary is loaded. On the other hand, whereas, strings
+protected with the `StringEncOptLocal` option are not subject to the dump attack but they could be recovered
 with a memory trace generated by a DBI (c.f. [Android Native Library Analysis with QBDI: Encoding Routine](https://blog.quarkslab.com/android-native-library-analysis-with-qbdi.html#encoding-routine)).
 
 Attackers could also use code lifting or emulation to automatically decode the strings. The scalability and
