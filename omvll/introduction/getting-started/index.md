@@ -113,7 +113,7 @@ class MyConfig(omvll.ObfuscationConfig):
 ```
 
 ### Global Exclusions
-You can configure **global exclusion** for both modules and functions inside the `MyConfig` class:
+You can configure **global exclusion** for both modules and functions inside `MyConfig` class:
 
 #### **Module Exclusion**
 ```python
@@ -143,7 +143,6 @@ class MyConfig(omvll.ObfuscationConfig):
 
         return omvll.ObfuscationConfig.default_config(self, module, func, [], [], [], 50)
 ```
-
 
 ### Python Standard Library
 
