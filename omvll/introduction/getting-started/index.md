@@ -112,6 +112,38 @@ class MyConfig(omvll.ObfuscationConfig):
         return False
 ```
 
+### Global Exclusions
+You can configure **global exclusion** for both modules and functions inside `MyConfig` class:
+
+#### **Module Exclusion**
+```python
+omvll.config.global_mod_exclude = [excluded_module_value]
+```
+
+#### **Function Exclusion**
+```python
+omvll.config.global_func_exclude = [excluded_function_value]
+```
+
+### Conditional Obfuscation
+Additionally, you can determine whether an obfuscation pass should be included or not by calling:
+
+```python
+omvll.ObfuscationConfig.default_config(self, module, func, [excluded_module_value], [excluded_function_value], [included_function_value], probability)
+```
+This function returns a **boolean value** indicating whether the obfuscation should be applied. It can be called inside any obfuscation pass function to dynamically control obfuscation behavior based on module, function, or probability constraints.
+
+```python {hl_lines="5-14"}
+class MyConfig(omvll.ObfuscationConfig):
+    def __init__(self):
+        super().__init__()
+
+    def obfuscate_string(self, module: omvll.Module, func: omvll.Function,
+                               string: bytes):
+
+        return omvll.ObfuscationConfig.default_config(self, module, func, [], [], [], 50)
+```
+
 ### Python Standard Library
 
 O-MVLL is statically linked with the Python VM. This static link allows us to **not require**
