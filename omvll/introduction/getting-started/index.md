@@ -116,22 +116,32 @@ class MyConfig(omvll.ObfuscationConfig):
 You can configure **global exclusion** for both modules and functions inside `MyConfig` class:
 
 #### **Module Exclusion**
+As you may know, a module is a top-level container that represents a single unit of compilation. This means a module is each of the compile units you have (every .c, .cpp ...).
 ```python
-omvll.config.global_mod_exclude = [excluded_module_value]
+omvll.config.global_mod_exclude = [excluded_module_1, excluded_module_2]
 ```
 
 #### **Function Exclusion**
 ```python
-omvll.config.global_func_exclude = [excluded_function_value]
+omvll.config.global_func_exclude = [excluded_function_1, excluded_function_2]
 ```
 
 ### Conditional Obfuscation
-Additionally, you can determine whether an obfuscation pass should be included or not by calling:
+Additionally, you can use the following helper function to decide whether to apply a given obfuscation pass to a given function:
 
 ```python
 omvll.ObfuscationConfig.default_config(self, module, func, [excluded_module_value], [excluded_function_value], [included_function_value], probability)
 ```
-This function returns a **boolean value** indicating whether the obfuscation should be applied. It can be called inside any obfuscation pass function to dynamically control obfuscation behavior based on module, function, or probability constraints.
+This function returns a **boolean value** indicating whether the obfuscation should be applied, based on a common algorithm:
+
+1. Returns **False** if the module name is in the excluded modules list.
+2. Returns **False** if the function name is in the excluded functions list.
+3. Returns **True** if the function name is in the included function list.
+4. Finally, if none of the conditions above are met, returns **True** with the probability passed in as the last parameter.
+
+This allows users to easily force / skip the application of individual obfuscation passes to any given function or module, while at the same time applying a randomised approach to the functions that are not present in exclude / include lists.
+
+Global excludes take precedence over local include lists.
 
 ```python {hl_lines="5-14"}
 class MyConfig(omvll.ObfuscationConfig):
