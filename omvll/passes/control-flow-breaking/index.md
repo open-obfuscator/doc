@@ -11,10 +11,6 @@ img_compare = true
 The purpose of this pass is to break the control-flow representation.
 {{< /pass_purpose >}}
 
-{{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass is currently not supported on **<u>iOS</u>**.
-{{< /alert >}}
-
 {{< compare "svg/control-flow-breaking-1.svg" "svg/control-flow-breaking-2.svg" "omvll">}}
 
 Control-Flow representation is an important piece of information for reverse engineers as it is used to
