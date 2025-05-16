@@ -480,12 +480,11 @@ $ python -m pip install [--user] omvll
 {{< admonition title="Cross Compilation" icon="fa-regular fa-triangle-exclamation" color="danger">}}
 O-MVLL is currently tested and CI-compiled for the following configurations:
 
-- **Android NDK**: (Linux Debian Stretch)
-- **iOS**: macOS 14.5 (arm64 & x86-64)
+- **Android NDK**: Linux Debian Stretch and macOS 15.4 (arm64 & x86-64)
+- **iOS**: macOS 15.4 (arm64 & x86-64)
 
 <center><strong class="text-danger">
-In particular, we did not test and we do not provide O-MVLL for cross-compiling Android projects on OSX and
-Windows
+In particular, we did not test and we do not provide O-MVLL for cross-compiling Android projects on Windows.
 </strong></center>
 
 {{</ admonition >}}
