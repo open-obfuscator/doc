@@ -247,14 +247,14 @@ LD_LIBRARY_PATH=<NDK_HOME>/toolchains/llvm/prebuilt/linux-x86_64/lib64
 ```
 
 `<NDK_HOME>` is the root directory of the NDK. If the NDK is installed along with the Android SDK,
-it should be located in `$ANDROID_HOME/ndk/26.3.11579264` for the version `26.3.11579264`.
+it should be located in `$ANDROID_HOME/ndk/{{< get-var "omvll.ndk-version" >}}` for the version `{{< get-var "omvll.ndk-version" >}}`.
 
 {{< alert type="dark" icon="fa-regular fa-face-thinking" >}}
 The `clang` binary provided in the NDK is also linked with `libc++.so` but we don't need to manually provide the `lib64`
 directory as it uses a `RUNPATH` set to `$ORIGIN/../lib64`.
 {{</ alert >}}
 
-On **macOS**, you may encounter issues running NDK binaries like `clang` or `clang++` from NDK **26.3.11579264** and omvll pass, due to **System Integrity Protection (SIP)** and hardened runtime restrictions.
+On **macOS**, you may encounter issues running NDK binaries like `clang` or `clang++` from NDK **{{< get-var "omvll.ndk-version" >}}** and omvll pass, due to **System Integrity Protection (SIP)** and hardened runtime restrictions.
 
 ```bash
 Could not load library './OMVLL.dylib': Signature does not match
@@ -307,11 +307,11 @@ Replace `<identity>` with your valid code signing identity (you can find it usin
 ```bash
 codesign --force --options runtime --verbose=4 -s <identity> \
   --entitlements myentitlements.entitlements \
-  $ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
+  $ANDROID_HOME/ndk/{{< get-var "omvll.ndk-version" >}}/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
 
 codesign --force --options runtime --verbose=4 -s <identity> \
   --entitlements myentitlements.entitlements \
-  $ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
+  $ANDROID_HOME/ndk/{{< get-var "omvll.ndk-version" >}}/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
 ```
 
 After signing, the NDK tools should run correctly even with SIP enabled.
@@ -327,7 +327,7 @@ DSL block:
 ```gradle {hl_lines=[3, 7, 10, 11]}
 android {
     compileSdkVersion 30
-    ndkVersion        "26.3.11579264"
+    ndkVersion        "{{< get-var "omvll.ndk-version" >}}"
     ...
     buildTypes {
       release {
@@ -358,7 +358,7 @@ which is *sourced* before running Gradle or Android Studio:
 
 ```bash
 # File: omvll.env
-export NDK_VERSION=26.3.11579264
+export NDK_VERSION={{< get-var "omvll.ndk-version" >}}
 export LD_LIBRARY_PATH=${ANDROID_HOME}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/lib64
 export OMVLL_CONFIG=$(pwd)/app/o-config.py
 export OMVLL_PYTHONPATH=$HOME/path/python/Python-3.10.7/Lib
@@ -396,9 +396,6 @@ needs to be set.
 It can be worth adding `o-config.py`, `omvll.yml`, and `omvll.env` in `.gitignore` to avoid leaks.
 {{</ alert >}}
 
-{{< alert type="warning" icon="fa-regular fa-code-commit" >}}
-TODO add the MACOS limitation.
-{{</ alert >}}
 
 ## Android NDK (WSL)
 
@@ -452,24 +449,24 @@ yes | sdkmanager --licenses
 
 #### Installing SDK components
 
-* pay attention to use ndk version matching the downloaded obfuscator (I used `26.3.11579264 - omvll_ndk_r26d.so`)
+* pay attention to use ndk version matching the downloaded obfuscator (I used `{{< get-var "omvll.ndk-version" >}} - {{< get-var "omvll.omvll-ndk-name" >}}`)
 
 ```bash
 ./sdkmanager --update
-./sdkmanager "platforms;android-31" "build-tools;31.0.0" "ndk;26.3.11579264" "platform-tools"
+./sdkmanager "platforms;android-31" "build-tools;31.0.0" "ndk;{{< get-var "omvll.ndk-version" >}}" "platform-tools"
 ```
 
 ### Obfuscator related changes
 
 #### build.gradle
 
-* adjust path to obfuscator binary ``omvll_ndk_r26d.so``, change 'tom' to your username:
+* adjust path to obfuscator binary ``{{< get-var "omvll.omvll-ndk-name" >}}``, change 'tom' to your username:
 
 ```gradle
 externalNativeBuild {
     cmake {
         cppFlags "-std=c++14 -frtti -fexceptions
-                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/omvll_ndk_r26d.so"
+                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/{{< get-var "omvll.omvll-ndk-name" >}}"
     }
 }
 ```
@@ -477,7 +474,7 @@ externalNativeBuild {
 #### omvll.env
 
 ```bash
-export NDK_VERSION=26.3.11579264
+export NDK_VERSION={{< get-var "omvll.ndk-version" >}}
 export LD_LIBRARY_PATH=/home/tom/android/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/lib64
 export OMVLL_CONFIG=/mnt/c/Users/tom/path-to-project/omvll-config.py
 export OMVLL_PYTHONPATH=/mnt/c/Users/tom/path-to-project/Python-3.10.7/Lib
