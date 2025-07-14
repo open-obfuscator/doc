@@ -261,7 +261,7 @@ Could not load library './OMVLL.dylib': Signature does not match
 ```
 
 To resolve this, you must **either**:
-**Option 1: Disable SIP (Not Recommended)**
+**Option 1: Disable SIP**
 
 You can fully disable SIP using:
 
@@ -558,7 +558,7 @@ In particular, we did not test and we do not provide O-MVLL for cross-compiling 
 
 There is a CI for O-MVLL. For **all builds**, the packages are uploaded at the following addresses:
 
-- Nightly: [{{< get-var "omvll.release" >}}]({{< get-var "omvll.release" >}})
+- Releases: [{{< get-var "omvll.release" >}}]({{< get-var "omvll.release" >}})
 - Experimental: [{{< get-var "omvll.experimental" >}}]({{< get-var "omvll.experimental" >}})
 - CI: [{{< get-var "omvll.github" >}}/actions]({{< get-var "omvll.github" >}}/actions)
 
