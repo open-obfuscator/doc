@@ -1,0 +1,5 @@
+protections: ["static"]
+resilience: 2
+overhead: "Medium"
+attacks: "yes"
+source: https://github.com/open-obfuscator/o-mvll/tree/main/src/passes/indirect-call
