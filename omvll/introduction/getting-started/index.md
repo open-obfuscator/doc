@@ -230,12 +230,12 @@ To avoid ABI issues, O-MVLL (and its dependencies) are also compiled and linked 
 Most of the Linux distributions provide by default the GNU C++ standard library, aka `libstdc++`, and not
 the LLVM-based standard library, `libc++`.
 
-Since `libc++.so` is not usually installed on the system, when clang tries to dynamically load `OMVLL.so`,
+Since `libc++.so` is not usually installed on the system, when clang tries to dynamically load `{{< get-var "omvll-ndk-name-linux" >}}`,
 it fails with the following error:
 
 ```bash
-$ clang -fpass-plugin=./OMVLL.so main.c -o main
-Could not load library './OMVLL.so':
+$ clang -fpass-plugin=./{{< get-var "omvll-ndk-name-linux" >}} main.c -o main
+Could not load library './{{< get-var "omvll-ndk-name-linux" >}}':
 libc++abi.so.1: cannot open shared object file: No such file or directory
 ```
 
@@ -334,8 +334,8 @@ android {
         ndk.abiFilters 'arm64-v8a' // Force ARM64
         externalNativeBuild {
           cmake {
-            cppFlags '-fpass-plugin=<path>/OMVLL.so' // or OMVLL.dylib in MacOS systems
-            cFlags   '-fpass-plugin=<path>/OMVLL.so' // or OMVLL.dylib in MacOS systems
+            cppFlags '-fpass-plugin=<path>/{{< get-var "omvll-ndk-name-linux" >}}' // or {{< get-var "omvll-ndk-name-macos" >}} in MacOS systems
+            cFlags   '-fpass-plugin=<path>/{{< get-var "omvll-ndk-name-linux" >}}' // or {{< get-var "omvll-ndk-name-macos" >}} in MacOS systems
           }
         }
 }}}
@@ -449,7 +449,7 @@ yes | sdkmanager --licenses
 
 #### Installing SDK components
 
-* pay attention to use ndk version matching the downloaded obfuscator (I used `{{< get-var "omvll.ndk-version" >}} - {{< get-var "omvll.omvll-ndk-name" >}}`)
+* pay attention to use ndk version matching the downloaded obfuscator (I used `{{< get-var "omvll.ndk-version-linux" >}} - {{< get-var "omvll.omvll-ndk-name-linux" >}}`)
 
 ```bash
 ./sdkmanager --update
@@ -460,13 +460,13 @@ yes | sdkmanager --licenses
 
 #### build.gradle
 
-* adjust path to obfuscator binary ``{{< get-var "omvll.omvll-ndk-name" >}}``, change 'tom' to your username:
+* adjust path to obfuscator binary ``{{< get-var "omvll.omvll-ndk-name-linux" >}}``, change 'tom' to your username:
 
 ```gradle
 externalNativeBuild {
     cmake {
         cppFlags "-std=c++14 -frtti -fexceptions
-                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/{{< get-var "omvll.omvll-ndk-name" >}}"
+                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/{{< get-var "omvll.omvll-ndk-name-linux" >}}"
     }
 }
 ```
