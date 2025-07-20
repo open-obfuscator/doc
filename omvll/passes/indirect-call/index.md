@@ -14,6 +14,8 @@ calls into indirect calls, whose target address is reconstructed on the fly from
 random, statically stored shares.
 {{< /pass_purpose >}}
 
+{{< compare "svg/indirect-call-1.svg" "svg/indirect-call-2.svg" "omvll">}}
+
 Static analysis tools lean heavily on the call graph for interprocedural analyses, as
 it allows them to follow control-flow across different functions, propagate data-flow
 facts, as well as figure out how these calls affect the state of the program.
@@ -72,7 +74,7 @@ Is rewritten as follows:
 As it can be seen, the two shares are loaded from the two global arrays `@.icall.shares1` and
 `@.icall.shares2`, and the difference between the two is carried out. The result is cast
 to a pointer, which is now used as operand of the call-site, leading to a call to a pointer
-to the original function. 
+to the original function.
 
 As such, the target address is reconstructed and computed at runtime.
 
