@@ -17,6 +17,8 @@ from a shuffled, read-only jump table.
 There are known limitations on **<u>iOS</u>** for applications built in Release mode.
 {{< /alert >}}
 
+{{< compare "svg/indirect-br-1.svg" "svg/indirect-br-2.svg" "omvll">}}
+
 Static analysis tools rely on explicit branch targets when attempting to reconstruct the
 boundaries of a function and its control-flow, as accurately as possible. `IndirectBranch`
 pass aims at severing the control-flow edges: each jump successor is added to a table,
