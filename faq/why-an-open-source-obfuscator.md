@@ -1,6 +1,6 @@
 +++
 title           = "Why an open-source obfuscator?"
-headless        = true
+headless        = false
 sitemap_exclude = true
 weight          = 20
 +++

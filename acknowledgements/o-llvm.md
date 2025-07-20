@@ -4,7 +4,7 @@ website         = "https://github.com/obfuscator-llvm/obfuscator"
 description     = "The root of all the LLVM-based obfuscators."
 logo            = "/img/strong.code.png"
 icon            = "fa-solid fa-file-shield"
-headless        = true
+headless        = false
 sitemap_exclude = true
 weight          = 1
 +++

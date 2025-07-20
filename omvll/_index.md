@@ -6,5 +6,5 @@ token       = "omvll"
 logo        = "static/img/omvll/logo.svg"
 css_color   = "primary"
 tags        = ["llvm", "obfuscation", "o-mvll", "o-llvm", "control-flow flattening", "MBA"]
-headless    = true
+headless    = false
 +++

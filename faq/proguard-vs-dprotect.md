@@ -1,6 +1,6 @@
 +++
 title           = "What is the difference between Proguard and dProtect?"
-headless        = true
+headless        = false
 sitemap_exclude = true
 weight          = 30
 +++

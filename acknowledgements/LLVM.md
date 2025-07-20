@@ -4,7 +4,7 @@ website         = "https://llvm.org/"
 description     = "A modular compiler and toolchain framework."
 logo            = "https://llvm.org/img/DragonSmall.png"
 icon            = "fa-solid fa-gears"
-headless        = true
+headless        = false
 sitemap_exclude = true
 weight          = 20
 +++

@@ -1,5 +1,5 @@
 +++
-headless        = true
+headless        = false
 typed           = true
 sitemap_exclude = true
 enable_copy     = true
