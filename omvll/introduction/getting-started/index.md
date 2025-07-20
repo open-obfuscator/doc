@@ -234,8 +234,8 @@ Since `libc++.so` is not usually installed on the system, when clang tries to dy
 it fails with the following error:
 
 ```bash
-$ clang -fpass-plugin=./{{< get-var "omvll-ndk-name-linux" >}} main.c -o main
-Could not load library './{{< get-var "omvll-ndk-name-linux" >}}':
+$ clang -fpass-plugin=./omvll_ndk_r26d.so main.c -o main
+Could not load library './omvll_ndk_r26d.so':
 libc++abi.so.1: cannot open shared object file: No such file or directory
 ```
 
@@ -261,6 +261,7 @@ Could not load library './OMVLL.dylib': Signature does not match
 ```
 
 To resolve this, you must **either**:
+
 **Option 1: Disable SIP**
 
 You can fully disable SIP using:
@@ -269,7 +270,7 @@ You can fully disable SIP using:
 csrutil disable
 ```
 
-> ⚠️ This requires booting into **macOS Recovery Mode** and has significant security implications. Only use this method if you understand the risks.
+> :warning: This requires booting into **macOS Recovery Mode** and has significant security implications. Only use this method if you understand the risks.
 
 ---
 
@@ -307,11 +308,11 @@ Replace `<identity>` with your valid code signing identity (you can find it usin
 ```bash
 codesign --force --options runtime --verbose=4 -s <identity> \
   --entitlements myentitlements.entitlements \
-  $ANDROID_HOME/ndk/{{< get-var "omvll.ndk-version" >}}/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
+  $ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
 
 codesign --force --options runtime --verbose=4 -s <identity> \
   --entitlements myentitlements.entitlements \
-  $ANDROID_HOME/ndk/{{< get-var "omvll.ndk-version" >}}/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
+  $ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
 ```
 
 After signing, the NDK tools should run correctly even with SIP enabled.
@@ -327,15 +328,15 @@ DSL block:
 ```gradle {hl_lines=[3, 7, 10, 11]}
 android {
     compileSdkVersion 30
-    ndkVersion        "{{< get-var "omvll.ndk-version" >}}"
+    ndkVersion        "26.3.11579264"
     ...
     buildTypes {
       release {
         ndk.abiFilters 'arm64-v8a' // Force ARM64
         externalNativeBuild {
           cmake {
-            cppFlags '-fpass-plugin=<path>/{{< get-var "omvll-ndk-name-linux" >}}' // or {{< get-var "omvll-ndk-name-macos" >}} in MacOS systems
-            cFlags   '-fpass-plugin=<path>/{{< get-var "omvll-ndk-name-linux" >}}' // or {{< get-var "omvll-ndk-name-macos" >}} in MacOS systems
+            cppFlags '-fpass-plugin=<path>/omvll_ndk_r26d.so' // or omvll-ndk.dylib in MacOS systems
+            cFlags   '-fpass-plugin=<path>/omvll_ndk_r26d.so' // or omvll-ndk.dylib in MacOS systems
           }
         }
 }}}
@@ -358,7 +359,7 @@ which is *sourced* before running Gradle or Android Studio:
 
 ```bash
 # File: omvll.env
-export NDK_VERSION={{< get-var "omvll.ndk-version" >}}
+export NDK_VERSION=26.3.11579264
 export LD_LIBRARY_PATH=${ANDROID_HOME}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/lib64
 export OMVLL_CONFIG=$(pwd)/app/o-config.py
 export OMVLL_PYTHONPATH=$HOME/path/python/Python-3.10.7/Lib
@@ -453,7 +454,7 @@ yes | sdkmanager --licenses
 
 ```bash
 ./sdkmanager --update
-./sdkmanager "platforms;android-31" "build-tools;31.0.0" "ndk;{{< get-var "omvll.ndk-version" >}}" "platform-tools"
+./sdkmanager "platforms;android-31" "build-tools;31.0.0" "ndk;26.3.11579264" "platform-tools"
 ```
 
 ### Obfuscator related changes
@@ -466,7 +467,7 @@ yes | sdkmanager --licenses
 externalNativeBuild {
     cmake {
         cppFlags "-std=c++14 -frtti -fexceptions
-                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/{{< get-var "omvll.omvll-ndk-name-linux" >}}"
+                  -fpass-plugin=/mnt/c/Users/tom/path-to-project/omvll_ndk_r26d.so"
     }
 }
 ```
@@ -474,7 +475,7 @@ externalNativeBuild {
 #### omvll.env
 
 ```bash
-export NDK_VERSION={{< get-var "omvll.ndk-version" >}}
+export NDK_VERSION=26.3.11579264
 export LD_LIBRARY_PATH=/home/tom/android/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/linux-x86_64/lib64
 export OMVLL_CONFIG=/mnt/c/Users/tom/path-to-project/omvll-config.py
 export OMVLL_PYTHONPATH=/mnt/c/Users/tom/path-to-project/Python-3.10.7/Lib
