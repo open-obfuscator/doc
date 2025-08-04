@@ -208,6 +208,6 @@ If the function is too small, these offsets might point in a function next to th
 
 #### iOS Swift generated functions
 
-The iOS compiler changes the way functions are called, and it also injects functions the user does not control. If BreakControlFlow is applied to this functions it can cause duplicated symbols errors or break the call conventions.
+The Swift compiler may introduce helper functions / thunks – which use different calling conventions –, in ways that are not visible at the source level. If BreakControlFlow pass is applied to these compiler-generated routines, it may cause duplicate symbol errors or violate the expected calling convention.
 
-In order to avoid this, as a user of omvll, you need to be more specific on functions to be protected by this pass.
+In order to prevent such issues, restrict the pass to user-defined functions only.
