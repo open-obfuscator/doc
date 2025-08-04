@@ -11,10 +11,6 @@ img_compare = true
 The purpose of this pass is to break the control-flow representation.
 {{< /pass_purpose >}}
 
-{{< alert type="danger" icon="fa-brands fa-apple">}}
-This pass is currently not supported on **<u>iOS</u>**.
-{{< /alert >}}
-
 {{< compare "svg/control-flow-breaking-1.svg" "svg/control-flow-breaking-2.svg" "omvll">}}
 
 Control-Flow representation is an important piece of information for reverse engineers as it is used to
@@ -199,6 +195,8 @@ In the end, the wrapper looks like this:
 
 ## Limitations
 
+#### Small functions
+
 As already mentioned, this pass could be defeated with manual actions on the inconsistent code. In addition,
 the disassemblers might improve their heuristics in future versions which would make this pass less efficient.
 
@@ -207,3 +205,9 @@ points in the function to protect.
 If the function is too small, these offsets might point in a function next to the targeted one.
 
 [^note_ldr]: This instruction loads the content at `pc + #offset`
+
+#### iOS Swift generated functions
+
+The iOS compiler changes the way functions are called, and it also injects functions the user does not control. If BreakControlFlow is applied to this functions it can cause duplicated symbols errors or break the call conventions.
+
+In order to avoid this, as a user of omvll, you need to be more specific on functions to be protected by this pass.
