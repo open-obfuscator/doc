@@ -1,6 +1,6 @@
 +++
 title           = "In which context could I use Open-Obfuscator?"
-headless        = false
+headless        = true
 sitemap_exclude = true
 weight          = 50
 +++

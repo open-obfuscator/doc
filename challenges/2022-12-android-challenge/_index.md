@@ -9,7 +9,6 @@ resolved        = true
 challenge_file  = "https://romainthomas.fr/challenge-pydroid.apk"
 headless        = false
 sitemap_exclude = false
-type = "2022-12-android-challenge"
 level           = 4
 anime           = true
 countdown       = true

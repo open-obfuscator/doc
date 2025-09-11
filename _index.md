@@ -1,4 +1,4 @@
 +++
-headless        = false
-sitemap_exclude = false
+headless        = true
+sitemap_exclude = true
 +++

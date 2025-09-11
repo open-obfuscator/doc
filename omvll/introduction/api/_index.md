@@ -2,7 +2,7 @@
 title           = "API"
 weight          = 30
 is_external     = true
-headless        = false
+headless        = true
 sitemap_exclude = true
 +++
 

@@ -1,6 +1,6 @@
 +++
 title           = "Why another obfuscator?"
-headless        = false
+headless        = true
 sitemap_exclude = true
 weight          = 10
 +++

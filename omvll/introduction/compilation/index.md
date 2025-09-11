@@ -39,19 +39,32 @@ $ cmake -GNinja ..                                              \
         -DPython3_INCLUDE_DIR=${PYTHON_ROOT}/include/python3.10 \
         -Dpybind11_DIR=${PYBIND11_ROOT}/share/cmake/pybind11    \
         -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
-        -DLLVM_DIR=${NDK_STAGE2}/lib64/cmake/llvm
+        -DLLVM_DIR=${NDK_STAGE2}/lib64/cmake/llvm               \
+        -DOMVLL_ABI=CustomAndroid
 $ ninja
 ```
 
-##### On OSX
+##### On macOS
+
+The plugin can be built on macOS for both NDK and Xcode toolchains.
+**Prerequisite**: Set the `$LLVM_ROOT` environment variable to point to the LLVM
+package corresponding to your target toolchain:
+
+1. NDK: Package ends with `NDK*-Darwin`
+2. Xcode: Package ends with `git-{arch}-Darwin`.
+
+###### Xcode
 
 ```bash
+export XCODE_TOOLCHAIN="$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain"
+
 $ cmake   -GNinja                                                 \
           -S src                                                  \
           -B build                                                \
-          -DCMAKE_C_COMPILER=$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang              \
-          -DCMAKE_CXX_COMPILER=$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++            \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET="14.5"                    \
+          -DCMAKE_BUILD_TYPE=Release                              \
+          -DCMAKE_C_COMPILER=${XCODE_TOOLCHAIN}/usr/bin/clang     \
+          -DCMAKE_CXX_COMPILER=${XCODE_TOOLCHAIN}/usr/bin/clang++ \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET="15.4"                    \
           -DPython3_ROOT_DIR=${PYTHON_ROOT}                       \
           -DPython3_LIBRARY=${PYTHON_ROOT}/lib/libpython3.10.a    \
           -DPython3_INCLUDE_DIR=${PYTHON_ROOT}/include/python3.10 \
@@ -59,13 +72,40 @@ $ cmake   -GNinja                                                 \
           -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
           -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
           -DPYBIND11_NOPYTHON=1                                   \
+          -DOMVLL_ABI=Apple
 $ ninja -C build
 ```
 
-Since the dependencies of O-MVLL are fixed for a given version of the NDK/Xcode, you can download the
-pre-compiled binaries:
+###### NDK
 
-### NDK
+{{< alert type="info" >}}
+The macOS-compatible NDK toolchain compiler is available through: [`android/ndk/releases`](https://github.com/android/ndk/releases/tag/r26d).
+{{</ alert >}}
+
+```bash
+export NDK_COMPILER="/path/to/toolchains/llvm/prebuilt/darwin"
+
+$ cmake   -GNinja                                                 \
+          -S src                                                  \
+          -B build                                                \
+          -DCMAKE_BUILD_TYPE=Release                              \
+          -DCMAKE_C_COMPILER=${NDK_COMPILER}/bin/clang            \
+          -DCMAKE_CXX_COMPILER=${NDK_COMPILER}/bin/clang++        \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET="15.4"                    \
+          -DPython3_ROOT_DIR=${PYTHON_ROOT}                       \
+          -DPython3_LIBRARY=${PYTHON_ROOT}/lib/libpython3.10.a    \
+          -DPython3_INCLUDE_DIR=${PYTHON_ROOT}/include/python3.10 \
+          -Dpybind11_DIR=${PYBIND11_ROOT}/share/cmake/pybind11    \
+          -Dspdlog_DIR=${SPDLOG_ROOT}/lib/cmake/spdlog            \
+          -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
+          -DPYBIND11_NOPYTHON=1                                   \
+          -DOMVLL_ABI=Android
+$ ninja -C build
+```
+
+You can download the dependencies at the following links.
+
+### NDK on Linux
 
 {{< alert type="info" >}}
 All the dependencies are compiled from the Docker image: [`openobfuscator/omvll-ndk`](https://hub.docker.com/r/openobfuscator/omvll-ndk).
@@ -75,6 +115,12 @@ All the dependencies are compiled from the Docker image: [`openobfuscator/omvll-
 |---------|--------------------------------------------------------------------------------------|
 | `r25c`   | [{{< get-var "omvll.prebuilt.ndk.r25c" >}}]({{< get-var "omvll.prebuilt.ndk.r25c" >}}) |
 | `r26d`   | [{{< get-var "omvll.prebuilt.ndk.r26d" >}}]({{< get-var "omvll.prebuilt.ndk.r26d" >}}) |
+
+### NDK on macOS
+
+| Version  | URL                                                                                      |
+|----------|------------------------------------------------------------------------------------------|
+| `r26d`   | [{{< get-var "omvll.prebuilt.ndk-macos.r26d" >}}]({{< get-var "omvll.prebuilt.ndk-macos.r26d" >}}) |
 
 ### Xcode
 
@@ -86,6 +132,7 @@ All the dependencies are compiled with both architectures: `arm64` & `x86-64` fr
 |----------|------------------------------------------------------------------------------------------|
 | `14.1` | [{{< get-var "omvll.prebuilt.xcode.v14_1" >}}]({{< get-var "omvll.prebuilt.xcode.v14_1" >}}) |
 | `15.2` | [{{< get-var "omvll.prebuilt.xcode.v15_2" >}}]({{< get-var "omvll.prebuilt.xcode.v15_2" >}}) |
+| `16.3` | [{{< get-var "omvll.prebuilt.xcode.v16_3" >}}]({{< get-var "omvll.prebuilt.xcode.v16_3" >}}) |
 
 {{< admonition title="Compilation Time" icon="fa-light fa-rabbit-running" color="success">}}
 Since O-MVLL is an out-of-tree plugin, **it takes about 2 minutes** to fully compile the obfuscator (using
@@ -138,12 +185,11 @@ $ docker run --rm                           \
 $ docker pull openobfuscator/omvll-xcode
 $ git clone {{< get-var "omvll.github" >}}
 
-$ curl -LO {{< get-var "omvll.prebuilt.xcode.v15_2" >}}
+$ curl -LO {{< get-var "omvll.prebuilt.xcode.v16_3" >}}
 $ mkdir -p ./third-party
-$ tar xvf omvll-deps-xcode-15_2.tar -C ./third-party
+$ tar xvf omvll-v1.4.0-macos-deps.tar -C ./third-party
 $ docker run --rm                           \
          -v $(pwd)/o-mvll:/o-mvll           \
          -v $(pwd)/third-party:/third-party \
-         openobfuscator/omvll-xcode sh /o-mvll/scripts/docker/xcode_15_compile.sh
-
+         openobfuscator/omvll-xcode sh /o-mvll/scripts/docker/xcode_16_compile.sh
 ```

@@ -1,5 +1,5 @@
 +++
-headless        = false
+headless        = true
 sitemap_exclude = true
 +++
 

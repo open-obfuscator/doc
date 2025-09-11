@@ -2,9 +2,9 @@
 title           = "Guardsquare"
 website         = "https://www.guardsquare.com/"
 description     = "The creator of Proguard, DexGuard and iXGuard."
-logo            = "https://avatars.githubusercontent.com/u/17545095?s=200&v=4"
+logo            = "https://miro.medium.com/max/2400/2*Nx1qsipN2pqbB4IGp8pw7g.png"
 icon            = "fa-solid fa-shield-halved"
-headless        = false
+headless        = true
 sitemap_exclude = true
 weight          = 10
 +++
