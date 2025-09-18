@@ -1,0 +1,5 @@
+protections: ["static"]
+resilience: 1
+overhead: "Medium"
+attacks: "yes"
+source: https://github.com/open-obfuscator/o-mvll/blob/main/src/passes/function-outline
