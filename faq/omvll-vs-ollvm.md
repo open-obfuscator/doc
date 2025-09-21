@@ -1,6 +1,6 @@
 +++
 title           = "What is the difference between O-MVLL and O-LLVM (and its forks)?"
-headless        = true
+headless        = false
 sitemap_exclude = true
 weight          = 40
 +++
