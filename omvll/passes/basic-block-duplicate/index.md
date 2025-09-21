@@ -12,6 +12,9 @@ This pass aims at duplicating selected basic blocks and inserting a coin-flip br
 that picks, at runtime, whether to execute the original block or its clone.
 {{< /pass_purpose >}}
 
+
+{{< compare "svg/basic-block-duplicate-1.svg" "svg/basic-block-duplicate-2.svg" "omvll">}}
+
 As analyzing program's control-flow graph is a fundamental step during static reverse
 engineering efforts, this pass attempts to introduce noise and redundancy by creating
 duplicated blocks, for the selected ones, and jump onto the original or cloned versions
@@ -79,5 +82,5 @@ next:
 
 ## Limitations
 
-- One may incur high performance penalty due to the overhead coming from duplicated code, 
+- One may incur high performance penalty due to the overhead coming from duplicated code,
   in addition to an increase in code size.

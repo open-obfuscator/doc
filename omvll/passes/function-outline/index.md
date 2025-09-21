@@ -13,6 +13,8 @@ blocks into new dedicated functions. The outlined region is replaced with a call
 to the newly-created function.
 {{< /pass_purpose >}}
 
+{{< compare "svg/function-outline-1.svg" "svg/function-outline-2.svg" "omvll">}}
+
 Static analysis tools rely on examining the control-flow graph of a function to
 understand its logic and reason about its behavior. This pass attempts to disrupt this
 premise by randomly breaking up function bodies, lifting basic blocks into dedicated
@@ -25,7 +27,7 @@ calling security-sensitive routines. To limit code-size growth and extra calls
 overhead, it is also recommended to enable the pass probabilistically. Furthermore,
 it may be recommended to schedule the pass either after Inliner has executed, or
 marking the outlined function as `noinline`. For increased security, it is suggested
-to enable the pass in conjunction with other passes. 
+to enable the pass in conjunction with other passes.
 
 ## How to use it?
 
