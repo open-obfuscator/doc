@@ -58,9 +58,7 @@ package corresponding to your target toolchain:
 ```bash
 export XCODE_TOOLCHAIN="$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain"
 
-$ cmake   -GNinja                                                 \
-          -S src                                                  \
-          -B build                                                \
+$ cmake   -GNinja ..                                              \
           -DCMAKE_BUILD_TYPE=Release                              \
           -DCMAKE_C_COMPILER=${XCODE_TOOLCHAIN}/usr/bin/clang     \
           -DCMAKE_CXX_COMPILER=${XCODE_TOOLCHAIN}/usr/bin/clang++ \
@@ -73,7 +71,7 @@ $ cmake   -GNinja                                                 \
           -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
           -DPYBIND11_NOPYTHON=1                                   \
           -DOMVLL_ABI=Apple
-$ ninja -C build
+$ ninja
 ```
 
 ###### NDK
@@ -85,9 +83,7 @@ The macOS-compatible NDK toolchain compiler is available through: [`android/ndk/
 ```bash
 export NDK_COMPILER="/path/to/toolchains/llvm/prebuilt/darwin"
 
-$ cmake   -GNinja                                                 \
-          -S src                                                  \
-          -B build                                                \
+$ cmake   -GNinja ..                                              \
           -DCMAKE_BUILD_TYPE=Release                              \
           -DCMAKE_C_COMPILER=${NDK_COMPILER}/bin/clang            \
           -DCMAKE_CXX_COMPILER=${NDK_COMPILER}/bin/clang++        \
@@ -100,7 +96,7 @@ $ cmake   -GNinja                                                 \
           -DLLVM_DIR=${LLVM_ROOT}/lib/cmake/llvm                  \
           -DPYBIND11_NOPYTHON=1                                   \
           -DOMVLL_ABI=Android
-$ ninja -C build
+$ ninja
 ```
 
 You can download the dependencies at the following links.
