@@ -36,7 +36,7 @@ as shown below:
 
 ```python
 def basic_block_duplicate(self, mod: omvll.Module, func: omvll.Function):
-  # Select basic blocks with a 30% probability.
+  # Select basic blocks with a 20% probability.
   return omvll.BasicBlockDuplicateWithProbability(20)
 ```
 
