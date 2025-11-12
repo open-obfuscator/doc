@@ -126,7 +126,7 @@ omvll.config.global_mod_exclude = [excluded_module_1, excluded_module_2]
 omvll.config.global_func_exclude = [excluded_function_1, excluded_function_2]
 ```
 
-#### **Output Folder**
+### **Output Folder**
 You can define the output folder where OMVLL will store its generated *logs* and, in the future, other temporary files related to the obfuscation process.
 This option allows you to keep the working directory clean and organize all OMVLL-related outputs in a specific location.
 ```python
