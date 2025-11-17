@@ -127,7 +127,7 @@ omvll.config.global_func_exclude = [excluded_function_1, excluded_function_2]
 ```
 
 ### **Output Folder**
-You can define the output folder where OMVLL will store temporary files, such as the generated logs and other files related with the obfuscation process.
+You can define the output folder where O-MVLL will store temporary files, such as the generated logs and other files related with the obfuscation process.
 This option allows you to keep the working directory clean and organize all OMVLL-related outputs in a specific location.
 ```python
 current_path = Path(__file__).resolve().parent
