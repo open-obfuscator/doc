@@ -457,6 +457,18 @@ the feasibility of the code lifting and the emulation highly depend on the desig
 This pass does not currently support Objective-C strings.
 {{< /alert >}}
 
+### Known Issues
+
+**Swift `static let`/`static var` strings fall back to global encoding**
+
+When `StringEncOptLocal` is requested for a Swift `static let` or `static var` string literal longer than 15 bytes, the pass silently falls back to `StringEncOptGlobal` instead. This happens because these literals are detected as address-taken by a global initializer (via `isAddressTakenByGlobalInitializer`), which means the pass cannot attach a decode stub to the initializer — it has no instruction operands to rewrite. The situation is further complicated when `SWIFT_COMPILATION_MODE = singlefile` is used, as the string storage may reside in a different translation unit, preventing cross-unit inline rewriting.
+
+The net result is that the string is decoded at load time (global semantics) rather than lazily at point-of-use (local semantics), which weakens the protection level without any warning.
+
+{{< alert type="info" icon="fa-regular fa-circle-info">}}
+Follow [issue #187](https://github.com/open-obfuscator/o-mvll/issues/187) for updates on this limitation.
+{{< /alert >}}
+
 ## References
 
 {{< include-references "references.yml" >}}
